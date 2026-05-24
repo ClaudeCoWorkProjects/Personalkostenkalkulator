@@ -3,980 +3,675 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Potenzialrechner © Jens Meyer</title>
+  <title>Personalkostenkalkulator – Einsparpotenzial</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #f9f9f8;
+      --bg: #f4f6f9;
       --surface: #ffffff;
-      --surface-2: #f5f4ef;
-      --border: #e8e5df;
-      --orange: #da7756;
-      --orange-light: rgba(217,119,6,0.09);
-      --orange-border: rgba(217,119,6,0.2);
-      --orange-text: #b45309;
-      --icloud: #0071e3;
-      --icloud-dark: #0058b0;
-      --text: #1a1a18;
-      --text-2: #4a4a45;
-      --muted: #8a8a82;
-      --success: #15803d;
-      --radius: 16px;
-      --radius-sm: 8px;
-      --shadow: 0 1px 4px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.08);
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --border: #e2e8f0;
+      --accent: #2563eb;
+      --accent-light: #eff6ff;
+      --accent-dark: #1d4ed8;
+      --text: #1e293b;
+      --muted: #64748b;
+      --success: #16a34a;
+      --success-light: #f0fdf4;
+      --warn: #d97706;
+      --warn-light: #fffbeb;
+      --radius: 12px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.06);
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
       min-height: 100vh;
     }
 
-    /* ── HEADER ── */
     .header {
-      background: var(--text);
-      color: #f5f4ef;
-      padding: 2.75rem 2rem 2.25rem;
+      background: var(--accent);
+      color: white;
+      padding: 2rem 1.5rem 1.5rem;
       text-align: center;
-      position: relative;
+    }
+    .header h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .header p { opacity: 0.85; font-size: 0.95rem; max-width: 520px; margin: 0 auto; }
+
+    .badge {
+      display: inline-block;
+      margin-top: 1rem;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      padding: 0.3rem 0.9rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.03em;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem 1rem 4rem;
+    }
+
+    /* Progress */
+    .progress-bar-wrap {
+      background: var(--border);
+      border-radius: 99px;
+      height: 6px;
+      margin-bottom: 2rem;
       overflow: hidden;
     }
-    .header::before {
-      content: '';
-      position: absolute;
-      top: -60px; right: -60px;
-      width: 220px; height: 220px;
-      background: radial-gradient(circle, rgba(217,119,6,0.15) 0%, transparent 70%);
-      border-radius: 50%;
-    }
-    .header-inner { position: relative; z-index: 1; }
-
-    .header-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(217,119,6,0.22);
-      border: 0.5px solid rgba(217,119,6,0.45);
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--accent);
       border-radius: 99px;
-      padding: 0.25rem 1rem;
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: #fbbf24;
-      margin-bottom: 2rem;
+      transition: width 0.4s ease;
     }
-
-    .header-gallup {
-      font-size: 12px;
-      color: rgba(245,244,239,0.5);
-      font-style: italic;
-      margin-bottom: 0.2rem;
-    }
-    .header-gallup2 {
-      font-size: 12px;
-      color: rgba(245,244,239,0.5);
-      font-style: italic;
-      margin-bottom: 1.5rem;
-    }
-
-    .header h1 {
-      font-size: clamp(1.6rem, 4vw, 2.2rem);
-      font-weight: 700;
-      line-height: 1.25;
-      letter-spacing: -0.02em;
-      color: #f5f4ef;
-      margin-bottom: 0.75rem;
-      text-align: center;
-    }
-    .header h1 .hl { color: #fbbf24; font-weight: 500; }
-
-    .header-tagline {
-      font-size: 13px;
-      color: rgba(245,244,239,0.55);
-      letter-spacing: 0.05em;
-    }
-
-    /* ── CONTAINER ── */
-    .container {
-      max-width: 740px;
-      margin: 0 auto;
-      padding: 2rem 1rem 5rem;
-    }
-
-    /* ── SECTION LABEL ── */
-    .section-label {
+    .progress-label {
       display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
+      justify-content: space-between;
+      font-size: 0.8rem;
       color: var(--muted);
-      margin: 2rem 0 0.75rem;
-    }
-    .section-label::after {
-      content: '';
-      flex: 1;
-      height: 0.5px;
-      background: var(--border);
+      margin-bottom: 0.5rem;
     }
 
-    /* ── CARDS ── */
+    /* Cards */
     .card {
       background: var(--surface);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-sm);
-      padding: 1.5rem 1.75rem;
-      margin-bottom: 1rem;
-    }
-
-    .card-title {
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 0.3rem;
-    }
-    .card-desc {
-      font-size: 0.83rem;
-      color: var(--text-2);
-      line-height: 1.6;
-      margin-bottom: 1.1rem;
-    }
-    .card-desc p { margin-bottom: 0.1rem; }
-    .card-desc p.dim { color: var(--muted); }
-
-    /* ── FORM ── */
-    .field { margin-bottom: 1.1rem; }
-    .field:last-child { margin-bottom: 0; }
-
-    label.field-label {
-      display: block;
-      font-size: 0.81rem;
-      font-weight: 600;
-      color: var(--text-2);
-      margin-bottom: 0.4rem;
-    }
-    .hint {
-      font-size: 0.81rem;
-      color: var(--muted);
-      margin-top: 0.25rem;
-    }
-
-    input[type="number"] {
-      padding: 0.5rem 0.75rem;
       border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      font-size: 0.88rem;
-      color: var(--text);
-      background: var(--surface);
-      -moz-appearance: textfield;
-      appearance: textfield;
-      transition: border-color 0.15s;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
     }
-    input[type="number"]::-webkit-inner-spin-button { display: none; }
-    input[type="number"]:focus {
-      outline: none;
-      border-color: var(--orange);
-      box-shadow: 0 0 0 3px rgba(218,119,86,0.12);
-    }
-
-    /* ── SLIDER ── */
-    .slider-wrap { display: flex; align-items: center; gap: 0.85rem; margin-top: 0.2rem; }
-    .slider-wrap input[type="range"] {
-      flex: 1;
-      -webkit-appearance: none;
-      appearance: none;
-      height: 4px;
-      border-radius: 99px;
-      background: var(--border);
-      outline: none;
-      cursor: pointer;
-      border: none;
-      box-shadow: none;
-      padding: 0;
-    }
-    .slider-wrap input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 18px; height: 18px;
-      border-radius: 50%;
-      background: var(--orange);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-      cursor: pointer;
-      transition: transform 0.1s;
-    }
-    .slider-wrap input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
-    .slider-wrap input[type="range"]::-moz-range-thumb {
-      width: 18px; height: 18px;
-      border-radius: 50%;
-      background: var(--orange);
-      border: none;
-      cursor: pointer;
-    }
-
-    .pct-field {
-      width: 62px !important;
-      text-align: center;
-      font-weight: 600;
-      color: var(--orange-text) !important;
-      background: var(--orange-light) !important;
-      border-color: var(--orange-border) !important;
-      padding: 0.3rem 0.4rem !important;
-      font-size: 0.85rem !important;
-    }
-    .pct-field:focus {
-      background: white !important;
-      border-color: var(--orange) !important;
-    }
-
-    /* ── PILLS ── */
-    .pill-group { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 0.35rem; }
-    .pill-group input[type="radio"] { display: none; }
-    .pill-group label {
-      padding: 0.3rem 0.85rem;
-      border: 0.5px solid var(--border);
-      border-radius: 99px;
-      font-size: 0.81rem;
-      font-weight: 500;
-      color: var(--text-2);
-      cursor: pointer;
-      transition: all 0.15s;
-      background: var(--surface);
-    }
-    .pill-group input[type="radio"]:checked + label {
-      background: var(--orange);
-      border-color: var(--orange);
-      color: white;
-      font-weight: 600;
-    }
-    .pill-group label:hover { border-color: var(--orange); color: var(--orange); }
-
-    /* ── INLINE RESULT ── */
-    .inline-result {
-      background: var(--surface-2);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 0.6rem 1rem;
-      margin-top: 0.75rem;
+    .card-header {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      font-size: 0.82rem;
-      gap: 8px;
+      gap: 0.75rem;
+      margin-bottom: 1.4rem;
     }
-    .ir-label { color: var(--muted); }
-    .ir-value { font-weight: 700; color: var(--success); white-space: nowrap; }
-    .ir-value.neutral { color: var(--text); }
-
-    /* ── RISK BOX ── */
-    .risk-box {
-      border-radius: var(--radius-sm);
-      padding: 0.75rem 1rem;
-      margin-top: 0.85rem;
-      font-size: 0.81rem;
-      line-height: 1.6;
+    .card-icon {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      background: var(--accent-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
     }
-    .risk-box.risk-green  { background: rgba(21,128,61,0.07); border: 0.5px solid rgba(21,128,61,0.3); color: #166534; }
-    .risk-box.risk-yellow { background: rgba(202,138,4,0.08); border: 0.5px solid rgba(202,138,4,0.35); color: #854d0e; }
-    .risk-box.risk-amber  { background: rgba(217,119,6,0.09); border: 0.5px solid rgba(217,119,6,0.35); color: var(--orange-text); }
-    .risk-box.risk-red    { background: rgba(185,28,28,0.08); border: 0.5px solid rgba(185,28,28,0.35); color: #991b1b; }
-    .risk-box strong { display: block; margin-bottom: 0.2rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; }
+    .card-title { font-weight: 600; font-size: 1rem; }
+    .card-subtitle { font-size: 0.8rem; color: var(--muted); }
 
-    /* ── RESULT CARD ── */
+    /* Form fields */
+    .field { margin-bottom: 1.2rem; }
+    .field:last-child { margin-bottom: 0; }
+
+    label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 0.4rem;
+      color: var(--text);
+    }
+    label .hint {
+      font-weight: 400;
+      color: var(--muted);
+      font-size: 0.8rem;
+      margin-left: 0.3rem;
+    }
+
+    input[type="number"], select {
+      width: 100%;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 0.6rem 0.85rem;
+      font-size: 0.95rem;
+      color: var(--text);
+      background: white;
+      outline: none;
+      transition: border-color 0.15s;
+      -moz-appearance: textfield;
+    }
+    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+    input[type="number"]:focus, select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    }
+
+    .input-prefix {
+      display: flex;
+      align-items: center;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: border-color 0.15s;
+    }
+    .input-prefix:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    }
+    .input-prefix span {
+      padding: 0.6rem 0.75rem;
+      background: var(--bg);
+      border-right: 1.5px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .input-prefix input {
+      border: none !important;
+      box-shadow: none !important;
+      border-radius: 0;
+      flex: 1;
+    }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 520px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* Radio-style toggle */
+    .radio-group { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+    .radio-group input[type="radio"] { display: none; }
+    .radio-group label {
+      margin: 0;
+      padding: 0.5rem 1.1rem;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-weight: 400;
+    }
+    .radio-group input[type="radio"]:checked + label {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* Result section */
     .result-card {
-      background: var(--text);
-      color: #f5f4ef;
+      background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%);
+      color: white;
       border-radius: var(--radius);
       padding: 2rem;
-      margin-top: 2rem;
-      box-shadow: var(--shadow);
+      margin-bottom: 1.25rem;
+      box-shadow: 0 4px 24px rgba(37,99,235,0.3);
     }
-    .result-title {
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #fbbf24;
-      margin-bottom: 0.4rem;
-    }
+    .result-card h2 { font-size: 1rem; opacity: 0.85; margin-bottom: 0.5rem; font-weight: 500; }
     .result-total {
-      font-size: clamp(2rem, 6vw, 3rem);
-      font-weight: 700;
-      letter-spacing: -0.03em;
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
       line-height: 1;
-      margin-bottom: 0.35rem;
+      margin-bottom: 0.5rem;
     }
-    .result-disclaimer {
-      font-size: 0.75rem;
-      color: rgba(245,244,239,0.42);
-      font-style: italic;
-      line-height: 1.55;
-      margin-bottom: 1.75rem;
-    }
+    .result-sub { font-size: 0.85rem; opacity: 0.75; }
 
-    .result-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-      margin-bottom: 1.75rem;
-    }
-    @media (max-width: 500px) { .result-grid { grid-template-columns: 1fr; } }
-
-    .result-item {
-      background: rgba(255,255,255,0.06);
-      border: 0.5px solid rgba(255,255,255,0.1);
-      border-radius: var(--radius-sm);
-      padding: 0.9rem;
-    }
-    .result-item-label { font-size: 0.72rem; opacity: 0.55; margin-bottom: 0.2rem; }
-    .result-item-value { font-size: 1.05rem; font-weight: 700; }
-    .result-item-bar-wrap { height: 3px; background: rgba(255,255,255,0.1); border-radius: 99px; margin-top: 0.5rem; overflow: hidden; }
-    .result-item-bar { height: 100%; border-radius: 99px; background: #fbbf24; }
-    .result-item.risk {
-      background: rgba(217,119,6,0.15);
-      border-color: rgba(217,119,6,0.35);
-    }
-    .result-item.risk .result-item-label { color: rgba(245,244,239,0.6); }
-    .result-item.risk .result-item-value { color: #fbbf24; font-size: 0.82rem; font-style: italic; line-height: 1.4; font-weight: 400; }
-
-    /* ── CTA ── */
-    .cta-block {
-      border-top: 0.5px solid rgba(255,255,255,0.1);
-      padding-top: 1.5rem;
-      text-align: center;
-    }
-    .cta-intro {
-      font-size: 0.88rem;
-      color: rgba(245,244,239,0.65);
-      margin-bottom: 1rem;
-    }
-    .cta-btns { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
-    .cta-btn {
-      display: inline-flex;
+    .breakdown { display: grid; gap: 0.75rem; margin-bottom: 1.25rem; }
+    .breakdown-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      display: flex;
       align-items: center;
-      gap: 6px;
-      background: var(--icloud);
-      color: white;
-      border: none;
-      border-radius: var(--radius-sm);
-      padding: 0.7rem 1.4rem;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.15s, transform 0.1s;
+      gap: 1rem;
     }
-    .cta-btn:hover { background: var(--icloud-dark); transform: translateY(-1px); }
-    .cta-btn:active { transform: translateY(0); }
+    .breakdown-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .breakdown-info { flex: 1; }
+    .breakdown-label { font-size: 0.8rem; color: var(--muted); }
+    .breakdown-value { font-size: 1.2rem; font-weight: 700; color: var(--success); }
+    .breakdown-value.zero { color: var(--muted); font-size: 1rem; font-weight: 400; }
 
-    /* ── FOOTER ── */
-    .disclaimer {
-      background: var(--surface-2);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 0.9rem 1.1rem;
-      font-size: 0.76rem;
-      color: var(--muted);
-      line-height: 1.65;
-      margin-top: 1rem;
+    .breakdown-bar-wrap {
+      height: 5px;
+      background: var(--border);
+      border-radius: 99px;
+      margin-top: 0.4rem;
+      overflow: hidden;
     }
-    .credit {
-      text-align: center;
-      font-size: 0.72rem;
+    .breakdown-bar {
+      height: 100%;
+      background: var(--success);
+      border-radius: 99px;
+      transition: width 0.6s ease;
+    }
+
+    .info-box {
+      background: var(--warn-light);
+      border: 1px solid #fde68a;
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      font-size: 0.82rem;
+      color: #92400e;
+      line-height: 1.5;
+    }
+    .info-box strong { display: block; margin-bottom: 0.25rem; color: #78350f; }
+
+    .assumptions {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      font-size: 0.8rem;
       color: var(--muted);
-      margin-top: 2rem;
+    }
+    .assumptions strong { display: block; margin-bottom: 0.5rem; color: var(--text); font-size: 0.82rem; }
+    .assumptions ul { padding-left: 1.25rem; }
+    .assumptions li { margin-bottom: 0.2rem; }
+
+    .cta-note {
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 1.5rem;
+      padding: 0 1rem;
+    }
+
+    .divider { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+
+    /* Animate in */
+    .card { animation: fadeUp 0.3s ease both; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
 
-<header class="header">
-  <div class="header-inner">
-    <div class="header-badge">⚡ Potenzialrechner © Jens Meyer</div>
-    <div class="header-gallup">Gallup beziffert den volkswirtschaftlichen Schaden durch innere Kündigung</div>
-    <div class="header-gallup2">auf 118–151 Mrd. € jährlich.</div>
-    <h1>Welches Einsparpotenzial<br>hat <span class="hl">Ihr</span> Unternehmen?</h1>
-    <div class="header-tagline">9 Fragen. &nbsp; 3 Minuten. &nbsp; Eine Zahl.</div>
-  </div>
-</header>
+<div class="header">
+  <h1>Personalkostenkalkulator</h1>
+  <p>Berechnen Sie das ungenutzte Einsparpotenzial in Ihrer Personalarbeit – anhand weniger Kennzahlen.</p>
+  <div class="badge">Arbeitsprobe · Jens Kretschmar</div>
+</div>
 
 <div class="container">
 
-  <!-- ─── STAMMDATEN ─── -->
-  <div class="section-label">Grundlage</div>
+  <div class="progress-label">
+    <span>Fortschritt</span>
+    <span id="pct-label">0 %</span>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+
+  <!-- Block 1: Stammdaten -->
   <div class="card">
-    <div class="card-title">Stammdaten Ihres Unternehmens</div>
-    <div class="card-desc">Berechnungsgrundlage – alle Hebelwerte skalieren darauf.</div>
+    <div class="card-header">
+      <div class="card-icon">🏢</div>
+      <div>
+        <div class="card-title">Stammdaten</div>
+        <div class="card-subtitle">Basis für alle Berechnungen</div>
+      </div>
+    </div>
 
-    <div class="field">
-      <label class="field-label">Anzahl Mitarbeiter</label>
-      <div class="slider-wrap">
-        <input type="range" id="maS" min="5" max="500" value="50" step="5" oninput="syncN('maS','ma')">
-        <input type="number" id="ma" value="50" min="1" max="9999" oninput="syncN('ma','maS')" style="max-width:88px">
+    <div class="two-col">
+      <div class="field">
+        <label>Mitarbeiterzahl <span class="hint">(Vollzeitäquivalente)</span></label>
+        <input type="number" id="mitarbeiter" min="1" max="100000" placeholder="z. B. 150" />
+      </div>
+      <div class="field">
+        <label>Durchschnittliches Jahresgehalt <span class="hint">(brutto)</span></label>
+        <div class="input-prefix">
+          <span>€</span>
+          <input type="number" id="jahrgehalt" min="10000" max="500000" placeholder="45 000" />
+        </div>
       </div>
     </div>
 
     <div class="field">
-      <label class="field-label">Jahresbruttogehalt je Mitarbeiter (€)</label>
-      <div class="slider-wrap">
-        <input type="range" id="bruttoS" min="20000" max="120000" value="45000" step="1000" oninput="syncN('bruttoS','brutto')">
-        <input type="text" id="brutto" value="45.000" inputmode="numeric" oninput="syncN('brutto','bruttoS')" style="max-width:108px">
-      </div>
-    </div>
-
-    <div class="field">
-      <label class="field-label">Gesamtkostenfaktor <span style="font-weight:400;color:var(--muted)">(SV, 13. Gehalt, Zusatzleistungen)</span></label>
-      <div class="slider-wrap">
-        <input type="range" id="faktS" min="1.2" max="1.6" value="1.35" step="0.05" oninput="syncN('faktS','fakt')">
-        <input type="number" id="fakt" value="1.35" min="1.0" max="2.0" step="0.05" oninput="syncN('fakt','faktS')" style="max-width:80px">
-      </div>
-      <div class="hint">Typisch 1,30–1,45 · inkl. SV-Anteil (~21 %), Sonderzahlungen & betriebliche Zusatzkosten</div>
-    </div>
-
-    <div class="field">
-      <label class="field-label">Branche <span style="font-weight:400;color:var(--muted)">(beeinflusst Fluktuation & Einsparhebel)</span></label>
-      <div class="pill-group">
-        <input type="radio" name="branche" id="b0" value="1.0|12" checked><label for="b0">Allgemein</label>
-        <input type="radio" name="branche" id="b1" value="1.15|18"><label for="b1">Handel / Logistik</label>
-        <input type="radio" name="branche" id="b2" value="1.2|15"><label for="b2">Dienstleistung</label>
-        <input type="radio" name="branche" id="b3" value="0.9|8"><label for="b3">Produktion</label>
-        <input type="radio" name="branche" id="b4" value="1.25|20"><label for="b4">IT / Tech</label>
-        <input type="radio" name="branche" id="b5" value="1.1|25"><label for="b5">Gesundheit / Soziales</label>
-      </div>
-      <div class="hint" id="brancheHint">Multiplikator: 1,0× – typische Fluktuation: ~12 %</div>
-    </div>
-
-    <div class="inline-result" id="stammPreview" style="display:none">
-      <span class="ir-label">Gesamte Jahrespersonalkosten</span>
-      <span class="ir-value neutral" id="stammVal">–</span>
+      <label>Branche</label>
+      <select id="branche">
+        <option value="1.0">Branche wählen …</option>
+        <option value="1.15">Gesundheit &amp; Pflege</option>
+        <option value="1.10">Produktion &amp; Fertigung</option>
+        <option value="1.05">Handel &amp; Logistik</option>
+        <option value="1.0">IT &amp; Technologie</option>
+        <option value="1.05">Finanz &amp; Versicherung</option>
+        <option value="1.10">Bau &amp; Handwerk</option>
+        <option value="1.0">Dienstleistung &amp; Beratung</option>
+        <option value="1.0">Öffentlicher Dienst</option>
+      </select>
     </div>
   </div>
 
-  <!-- ─── LEISTUNG ─── -->
-  <div class="section-label">Schritt 1 · Das Kernproblem</div>
+  <!-- Block 2: Fluktuation -->
   <div class="card">
-    <div class="card-title">Durchschnittliche Leistungsbereitschaft</div>
-    <div class="card-desc">
-      <p>Wie viel der möglichen Arbeitsleistung rufen Ihre Mitarbeiter ab?</p>
-      <p>Gallup-Index DE: Schnitt ≈ 68 % – in KMU außerhalb der Top 20 % realistisch eher 55–65 %.</p>
-    </div>
-    <div class="field">
-      <label class="field-label">Aktuell abgerufene Leistung</label>
-      <div class="slider-wrap">
-        <input type="range" id="leistS" min="50" max="90" value="75" step="5" oninput="syncP('leistS','leistN')">
-        <input type="number" id="leistN" class="pct-field" value="75" min="50" max="90" oninput="syncP('leistN','leistS')">
+    <div class="card-header">
+      <div class="card-icon">🔄</div>
+      <div>
+        <div class="card-title">Mitarbeiterfluktuation</div>
+        <div class="card-subtitle">Recruiting- und Einarbeitungskosten</div>
       </div>
-      <div class="hint">Basis: 90 % als realistisches Maximum – 100 % ist keine Planungsgröße.</div>
     </div>
-    <div class="inline-result">
-      <span class="ir-label">Einsparpotenzial durch Leistungssteigerung</span>
-      <span class="ir-value" id="leistVal">–</span>
+
+    <div class="two-col">
+      <div class="field">
+        <label>Jährliche Fluktuationsrate <span class="hint">(%)</span></label>
+        <input type="number" id="fluktuationsrate" min="0" max="100" step="0.5" placeholder="z. B. 12" />
+      </div>
+      <div class="field">
+        <label>Kosten pro Neubesetzung <span class="hint">(€ gesamt)</span></label>
+        <div class="input-prefix">
+          <span>€</span>
+          <input type="number" id="neubesetzungskosten" min="0" max="500000" placeholder="8 000" />
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Wie läuft Recruiting hauptsächlich ab?</label>
+      <div class="radio-group">
+        <input type="radio" name="recruiting" id="r-intern" value="intern" />
+        <label for="r-intern">Intern</label>
+        <input type="radio" name="recruiting" id="r-extern" value="extern" />
+        <label for="r-extern">Extern (Agentur)</label>
+        <input type="radio" name="recruiting" id="r-mix" value="mix" checked />
+        <label for="r-mix">Mix</label>
+      </div>
     </div>
   </div>
 
-  <!-- ─── FEHLZEITEN ─── -->
-  <div class="section-label">Schritt 2 · Motivationsbedingte Fehlzeiten</div>
+  <!-- Block 3: Administrative Prozesse -->
   <div class="card">
-    <div class="card-title">Krank oder Lustlos?</div>
-    <div class="card-desc">
-      <p>DE-Schnitt: 19,4 Fehltage/Jahr (DAK 2024).</p>
-      <p>Studien belegen: 40–60 % sind motivationsbedingt.</p>
-    </div>
-    <div class="field">
-      <label class="field-label">Ø Fehltage pro Mitarbeiter und Jahr</label>
-      <div class="slider-wrap">
-        <input type="range" id="fehlS" min="1" max="35" value="19" step="1" oninput="syncN('fehlS','fehl')">
-        <input type="number" id="fehl" value="19" min="0" max="100" oninput="syncN('fehl','fehlS')" style="max-width:80px">
+    <div class="card-header">
+      <div class="card-icon">⚙️</div>
+      <div>
+        <div class="card-title">Administrative HR-Prozesse</div>
+        <div class="card-subtitle">Manueller Aufwand &amp; Automatisierungspotenzial</div>
       </div>
     </div>
-    <div class="field">
-      <label class="field-label">Davon motivationsbedingt</label>
-      <div class="slider-wrap">
-        <input type="range" id="fehlmS" min="20" max="70" value="40" step="5" oninput="syncP('fehlmS','fehlmN')">
-        <input type="number" id="fehlmN" class="pct-field" value="40" min="20" max="70" oninput="syncP('fehlmN','fehlmS')">
+
+    <div class="two-col">
+      <div class="field">
+        <label>HR-Mitarbeiter im Team</label>
+        <input type="number" id="hr-mitarbeiter" min="0" max="1000" placeholder="z. B. 4" />
+      </div>
+      <div class="field">
+        <label>Durchschn. Jahresgehalt HR <span class="hint">(brutto)</span></label>
+        <div class="input-prefix">
+          <span>€</span>
+          <input type="number" id="hr-gehalt" min="20000" max="200000" placeholder="52 000" />
+        </div>
       </div>
     </div>
-    <div class="inline-result">
-      <span class="ir-label">Einsparpotenzial durch besseres Betriebsklima &amp; Mitarbeiter-Commitment</span>
-      <span class="ir-value" id="fehlVal">–</span>
+
+    <div class="field">
+      <label>Anteil manueller/repetitiver Tätigkeiten <span class="hint">(% der Arbeitszeit)</span></label>
+      <input type="number" id="manuell-anteil" min="0" max="100" step="5" placeholder="z. B. 40" />
     </div>
-    <div class="hint">(Halbierung der motivationsbedingten Fehlzeiten)</div>
+
+    <div class="field">
+      <label>Digitalisierungsgrad der HR-Prozesse</label>
+      <div class="radio-group">
+        <input type="radio" name="diggrad" id="d-gering" value="0.5" />
+        <label for="d-gering">Gering (v. a. Excel &amp; E-Mail)</label>
+        <input type="radio" name="diggrad" id="d-mittel" value="0.3" checked />
+        <label for="d-mittel">Mittel (teilweise Software)</label>
+        <input type="radio" name="diggrad" id="d-hoch" value="0.15" />
+        <label for="d-hoch">Hoch (integriertes HRMS)</label>
+      </div>
+    </div>
   </div>
 
-  <!-- ─── ÜBERSTUNDEN ─── -->
-  <div class="section-label">Schritt 3 · Überstunden</div>
+  <!-- Block 4: Fehlzeiten -->
   <div class="card">
-    <div class="card-title">Vermeidbare Überstunden</div>
-    <div class="card-desc">
-      <p>Überstunden entstehen selten durch Workload – das wäre ein Strukturproblem.</p>
-      <p>Oft sind es Organisation, geringe Motivation oder Ausfälle durch Fehlzeiten.</p>
-    </div>
-    <div class="field">
-      <label class="field-label">Ø bezahlte Überstunden pro Mitarbeiter und Jahr</label>
-      <div class="slider-wrap">
-        <input type="range" id="uestdS" min="0" max="200" value="40" step="5" oninput="syncN('uestdS','uestd')">
-        <input type="number" id="uestd" value="40" min="0" oninput="syncN('uestd','uestdS')" style="max-width:80px">
-      </div>
-    </div>
-    <div class="field">
-      <label class="field-label">Davon vermeidbar</label>
-      <div class="slider-wrap">
-        <input type="range" id="uredS" min="30" max="80" value="60" step="5" oninput="syncP('uredS','uredN')">
-        <input type="number" id="uredN" class="pct-field" value="60" min="30" max="80" oninput="syncP('uredN','uredS')">
-      </div>
-    </div>
-    <div class="field">
-      <label class="field-label">Überstundenzuschlag</label>
-      <div class="pill-group">
-        <input type="radio" name="uzusch" id="uz0" value="1.0"><label for="uz0">Kein Zuschlag</label>
-        <input type="radio" name="uzusch" id="uz25" value="1.25"><label for="uz25">+25 %</label>
-        <input type="radio" name="uzusch" id="uz50" value="1.5"><label for="uz50">+50 %</label>
-      </div>
-    </div>
-    <div class="inline-result">
-      <span class="ir-label">Einsparpotenzial durch Produktivitätssteigerung</span>
-      <span class="ir-value" id="uestdVal">–</span>
-    </div>
-  </div>
-
-  <!-- ─── FLUKTUATION ─── -->
-  <div class="section-label">Schritt 4 · Fluktuation</div>
-  <div class="card">
-    <div class="card-title">Fluktuation &amp; ihre Kosten</div>
-    <div class="card-desc">
-      <p>Jede Neubesetzung kostet zwischen 50 % und 200 % des Jahresgehalts.</p>
-      <p>(Kienbaum 2023)</p>
-    </div>
-    <div class="field">
-      <label class="field-label">Jährliche Fluktuationsrate</label>
-      <div class="slider-wrap">
-        <input type="range" id="fluktS" min="2" max="40" value="12" step="1" oninput="syncP('fluktS','fluktN')">
-        <input type="number" id="fluktN" class="pct-field" value="12" min="2" max="40" oninput="syncP('fluktN','fluktS')">
-      </div>
-      <div class="hint" id="fluktHint">Ihrer Branche (Allgemein): typisch ~12 %</div>
-    </div>
-    <div class="field">
-      <label class="field-label">Kosten je Neubesetzung (% des Jahresgehalts)</label>
-      <div class="slider-wrap">
-        <input type="range" id="neuKostS" min="50" max="200" value="75" step="25" oninput="syncP('neuKostS','neuKostN')">
-        <input type="number" id="neuKostN" class="pct-field" value="75" min="50" max="200" oninput="syncP('neuKostN','neuKostS')">
-      </div>
-    </div>
-    <div class="field">
-      <label class="field-label">Recruiting-Typ</label>
-      <div class="pill-group">
-        <input type="radio" name="recrut" id="ri" value="0.8" checked><label for="ri">Intern</label>
-        <input type="radio" name="recrut" id="ra" value="1.0"><label for="ra">Extern / Agentur</label>
-        <input type="radio" name="recrut" id="rh" value="1.3"><label for="rh">Headhunter</label>
-      </div>
-    </div>
-    <div class="inline-result">
-      <span class="ir-label">Einsparpotenzial durch Halbierung der Fluktuation</span>
-      <span class="ir-value" id="fluktVal">–</span>
-    </div>
-  </div>
-
-  <!-- ─── KOMPENSIERBARE STELLEN ─── -->
-  <div class="section-label">Schritt 5 · Struktur-Effizienz</div>
-  <div class="card">
-    <div class="card-title">Kompensierbare Stellen bei genereller Leistungssteigerung</div>
-    <div class="card-desc">
-      <p>Wie viele Vollzeit-Stellen / Freelancer ließen sich ohne Qualitätsverlust einsparen?</p>
-      <p class="dim">(Keine Kündigung – Einsparung durch Nicht-Nachbesetzung und auslaufende Verträge.)</p>
-    </div>
-    <div class="field">
-      <label class="field-label">Kompensierbare Stellen / Freelancer</label>
-      <div class="slider-wrap">
-        <input type="range" id="kompS" min="0" max="20" value="2" step="1" oninput="syncN('kompS','komp')">
-        <input type="number" id="komp" value="2" min="0" oninput="syncN('komp','kompS')" style="max-width:80px">
-      </div>
-    </div>
-    <div class="inline-result">
-      <span class="ir-label">Einsparpotenzial (über 2 Jahre verteilt)</span>
-      <span class="ir-value" id="kompVal">–</span>
-    </div>
-  </div>
-
-  <!-- ─── HIGH PERFORMER ─── -->
-  <div class="section-label">Schritt 6 · Performancedichte</div>
-  <div class="card">
-    <div class="card-title">High-Performer-Dichte</div>
-    <div class="card-desc">
-      <p>McKinsey: High-Performer erbringen 2–4× den Output eines Durchschnittsmitarbeiters.</p>
-      <p>Und das kann man lernen.</p>
-    </div>
-    <div class="field">
-      <label class="field-label">Derzeitiger Anteil High-Performer</label>
-      <div class="slider-wrap">
-        <input type="range" id="hpIstS" min="0" max="40" value="10" step="5" oninput="syncP('hpIstS','hpIstN')">
-        <input type="number" id="hpIstN" class="pct-field" value="10" min="0" max="40" oninput="syncP('hpIstN','hpIstS')">
-      </div>
-    </div>
-    <div class="field">
-      <label class="field-label">Ziel</label>
-      <div class="slider-wrap">
-        <input type="range" id="hpZielS" min="10" max="80" value="25" step="5" oninput="syncP('hpZielS','hpZielN')">
-        <input type="number" id="hpZielN" class="pct-field" value="25" min="10" max="80" oninput="syncP('hpZielN','hpZielS')">
-      </div>
-      <div class="hint">Realistisches Maximum: 80 %</div>
-    </div>
-    <div class="inline-result">
-      <span class="ir-label">Mehrwert durch gesteigerte Leistungsdichte</span>
-      <span class="ir-value" id="hpVal">–</span>
-    </div>
-  </div>
-
-  <!-- ─── HR AUTOMATISIERUNG ─── -->
-  <div class="section-label">Schritt 7 · Automatisierung</div>
-  <div class="card">
-    <div class="card-title">Automatisierung HR &amp; Buchhaltung</div>
-    <div class="card-desc">
-      <p>HR und Buchhaltung sind selten Mischrollen –</p>
-      <p>bei vollständiger Systemablösung sind bis zu 95 % der Personalkosten einsparbar.</p>
-    </div>
-    <div class="field">
-      <label class="field-label">Anzahl HR- / Buchhaltungs-Mitarbeiter</label>
-      <div class="slider-wrap">
-        <input type="range" id="hrMaS" min="0" max="30" value="2" step="1" oninput="syncN('hrMaS','hrMa')">
-        <input type="number" id="hrMa" value="2" min="0" oninput="syncN('hrMa','hrMaS')" style="max-width:80px">
-      </div>
-    </div>
-    <div class="field">
-      <label class="field-label">Gewünschter Automatisierungsgrad</label>
-      <div class="slider-wrap">
-        <input type="range" id="hrAutoS" min="0" max="100" value="70" step="5" oninput="syncP('hrAutoS','hrAutoN')">
-        <input type="number" id="hrAutoN" class="pct-field" value="70" min="0" max="100" oninput="syncP('hrAutoN','hrAutoS')">
-      </div>
-      <div class="hint">40–60 % für Teilprozesse · bis zu 95 % bei vollständiger Systemablösung</div>
-    </div>
-    <div class="inline-result">
-      <span class="ir-label">Einsparpotenzial durch Automatisierung HR/Buchhaltung</span>
-      <span class="ir-value" id="hrVal">–</span>
-    </div>
-    <div class="hint" style="margin-top:0.5rem;">*abhängig vom Nutzungsgrad eingesetzter Systeme und Doppelfunktionen.</div>
-  </div>
-
-  <!-- ─── KUNDENZUFRIEDENHEIT ─── -->
-  <div class="section-label">Schritt 8 · Kundenzufriedenheit &amp; Konsequenzen</div>
-  <div class="card">
-    <div class="card-title">Kundenzufriedenheit &amp; Kundenverlustrisiko</div>
-    <div class="card-desc">
-      <p>Unmotivierte Mitarbeiter können Kundenbeziehungen gefährden.</p>
-      <p class="dim">Häufigste Gründe: Terminverzug &amp; hohe Fehlerquote.</p>
-      <p class="dim">Zwischenmenschliche Differenzen können dann das Zünglein an der Waage sein.</p>
-    </div>
-    <div class="field">
-      <label class="field-label">Wie zufrieden sind Ihre Kunden heute?</label>
-      <div class="pill-group">
-        <input type="radio" name="kzuf" id="kz4" value="4"><label for="kz4">Sehr zufrieden</label>
-        <input type="radio" name="kzuf" id="kz3" value="3"><label for="kz3">Zufrieden</label>
-        <input type="radio" name="kzuf" id="kz2" value="2"><label for="kz2">Teilweise zufrieden</label>
-        <input type="radio" name="kzuf" id="kz1" value="1"><label for="kz1">Unzufrieden</label>
+    <div class="card-header">
+      <div class="card-icon">🏥</div>
+      <div>
+        <div class="card-title">Fehlzeiten &amp; Krankenstand</div>
+        <div class="card-subtitle">Kosten und Reduktionspotenzial</div>
       </div>
     </div>
 
-    <div class="risk-box" id="risikoBox" style="display:none"></div>
-
-    <div class="field" style="margin-top:1rem;">
-      <label class="field-label">Welche Summe würden Sie investieren, um das Risiko eines Kundenverlusts deutlich zu reduzieren?</label>
-      <div class="slider-wrap">
-        <input type="range" id="kundenInvS" min="0" max="500000" value="0" step="5000" oninput="syncN('kundenInvS','kundenInv')">
-        <input type="text" id="kundenInv" value="" inputmode="numeric" oninput="syncN('kundenInv','kundenInvS')" style="max-width:110px">
+    <div class="two-col">
+      <div class="field">
+        <label>Krankenquote <span class="hint">(% der Arbeitstage)</span></label>
+        <input type="number" id="krankenquote" min="0" max="30" step="0.5" placeholder="z. B. 5.5" />
       </div>
-      <div class="hint">Probleme lösen sich nicht - sie werden teuer.</div>
-    </div>
-  </div>
-
-  <!-- ─── ERGEBNIS ─── -->
-  <div class="result-card">
-    <div class="result-title">Langfristiges Einsparpotenzial p.a.</div>
-    <div class="result-total" id="totalVal">–</div>
-    <div class="result-disclaimer">
-      Studien belegen: KMU bezahlen 15–25 % für Potenzial, das nie abgerufen wird.<br>
-      (Gallup, DAK, Kienbaum, DGFP)
-    </div>
-
-    <div class="result-grid">
-      <div class="result-item">
-        <div class="result-item-label">Leistungslücke </div>
-        <div class="result-item-value" id="r-leist">–</div>
-        <div class="result-item-bar-wrap"><div class="result-item-bar" id="rb-leist" style="width:0%"></div></div>
-      </div>
-      <div class="result-item">
-        <div class="result-item-label">High-Performer-Dichte (Struktur)</div>
-        <div class="result-item-value" id="r-hp">–</div>
-        <div class="result-item-bar-wrap"><div class="result-item-bar" id="rb-hp" style="width:0%"></div></div>
-      </div>
-      <div class="result-item">
-        <div class="result-item-label">Fluktuation &amp; ihre Kosten</div>
-        <div class="result-item-value" id="r-flukt">–</div>
-        <div class="result-item-bar-wrap"><div class="result-item-bar" id="rb-flukt" style="width:0%"></div></div>
-      </div>
-      <div class="result-item">
-        <div class="result-item-label">Motivationsbedingte Fehlzeiten</div>
-        <div class="result-item-value" id="r-fehl">–</div>
-        <div class="result-item-bar-wrap"><div class="result-item-bar" id="rb-fehl" style="width:0%"></div></div>
-      </div>
-      <div class="result-item">
-        <div class="result-item-label">HR- &amp; Buchhaltungs-Automatisierung</div>
-        <div class="result-item-value" id="r-hr">–</div>
-        <div class="result-item-bar-wrap"><div class="result-item-bar" id="rb-hr" style="width:0%"></div></div>
-      </div>
-      <div class="result-item">
-        <div class="result-item-label">Überstunden</div>
-        <div class="result-item-value" id="r-uestd">–</div>
-        <div class="result-item-bar-wrap"><div class="result-item-bar" id="rb-uestd" style="width:0%"></div></div>
-      </div>
-      <div class="result-item">
-        <div class="result-item-label">Komp. Stellen / Freelancer</div>
-        <div class="result-item-value" id="r-komp">–</div>
-        <div class="result-item-bar-wrap"><div class="result-item-bar" id="rb-komp" style="width:0%"></div></div>
-      </div>
-      <div class="result-item risk">
-        <div class="result-item-label">Kundenverlust-Risiko</div>
-        <div class="result-item-value">Nicht quantifizierbar.<br>Aber unbezahlbar.</div>
+      <div class="field">
+        <label>Arbeitstage pro Jahr</label>
+        <input type="number" id="arbeitstage" min="100" max="300" placeholder="220" />
       </div>
     </div>
 
-    <div class="cta-block">
-      <div class="cta-intro">Soll ich das für Sie umsetzen?</div>
-      <div class="cta-btns">
-        <a class="cta-btn" href="mailto:jensmeyer1974@icloud.com?subject=Potenzialrechner%20%E2%80%93%20Kontaktanfrage">
-          ✉ Kontakt – Jens Meyer
-        </a>
-        <a class="cta-btn" href="tel:+491786604259">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8a19.79 19.79 0 01-3.07-8.68A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-          +49 178 6604259
-        </a>
+    <div class="field">
+      <label>Gibt es ein strukturiertes Betriebliches Eingliederungsmanagement (BEM)?</label>
+      <div class="radio-group">
+        <input type="radio" name="bem" id="bem-ja" value="0.10" />
+        <label for="bem-ja">Ja, aktiv</label>
+        <input type="radio" name="bem" id="bem-teilweise" value="0.15" checked />
+        <label for="bem-teilweise">Teilweise</label>
+        <input type="radio" name="bem" id="bem-nein" value="0.20" />
+        <label for="bem-nein">Nein</label>
       </div>
     </div>
   </div>
 
-  <div class="disclaimer">
-    Methodik: Alle Werte basieren auf publizierten Benchmarks (Gallup, DAK, Kienbaum, DGFP).
-    Kalkulationen dienen der Orientierung, nicht der Bilanzierung.
+  <!-- Ergebnis -->
+  <div id="result-section" style="opacity:0; transition: opacity 0.4s;">
+
+    <hr class="divider" />
+
+    <div class="result-card">
+      <h2>Geschätztes jährliches Einsparpotenzial</h2>
+      <div class="result-total" id="result-total">–</div>
+      <div class="result-sub" id="result-sub">Füllen Sie alle Felder aus, um eine Schätzung zu erhalten.</div>
+    </div>
+
+    <div class="breakdown" id="breakdown">
+      <div class="breakdown-item">
+        <div class="breakdown-icon">🔄</div>
+        <div class="breakdown-info">
+          <div class="breakdown-label">Fluktuationskosten reduzieren</div>
+          <div class="breakdown-value" id="val-flukt">–</div>
+          <div class="breakdown-bar-wrap"><div class="breakdown-bar" id="bar-flukt" style="width:0%"></div></div>
+        </div>
+      </div>
+      <div class="breakdown-item">
+        <div class="breakdown-icon">⚙️</div>
+        <div class="breakdown-info">
+          <div class="breakdown-label">Admin-Prozesse automatisieren</div>
+          <div class="breakdown-value" id="val-admin">–</div>
+          <div class="breakdown-bar-wrap"><div class="breakdown-bar" id="bar-admin" style="width:0%"></div></div>
+        </div>
+      </div>
+      <div class="breakdown-item">
+        <div class="breakdown-icon">🏥</div>
+        <div class="breakdown-info">
+          <div class="breakdown-label">Fehlzeiten senken</div>
+          <div class="breakdown-value" id="val-fehl">–</div>
+          <div class="breakdown-bar-wrap"><div class="breakdown-bar" id="bar-fehl" style="width:0%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <strong>⚠️ Hinweis zur Methodik</strong>
+      Diese Berechnung basiert auf konservativen Benchmarks aus dem DACH-Raum (Quellen: DGFP, Kienbaum, SHRM). Sie zeigt Größenordnungen auf – keine Garantien. Der tatsächliche Hebel hängt von individuellen Maßnahmen ab.
+    </div>
+
+    <br />
+
+    <div class="assumptions" id="assumptions-box">
+      <strong>🔢 Rechenweg (transparent)</strong>
+      <ul id="assumptions-list"></ul>
+    </div>
+
+    <div class="cta-note">
+      Erstellt als interaktive Arbeitsprobe · Konzept &amp; Umsetzung: <strong>Jens Kretschmar</strong>
+    </div>
+
   </div>
-  <div class="credit">Potenzialrechner © Jens Meyer · 2025</div>
 
 </div>
 
 <script>
-const fmt = n => new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n);
-const fmtP = n => n.toFixed(0) + ' %';
-const fmtNum = n => new Intl.NumberFormat('de-DE',{maximumFractionDigits:0}).format(n);
-const numFmtIds = ['brutto','kundenInv'];
-const g = id => {
-  const el = document.getElementById(id);
-  if (!el) return 0;
-  // Only strip thousand separators for designated text fields
-  let raw = el.value;
-  if (numFmtIds.includes(id)) {
-    raw = raw.replace(/\./g,'').replace(',','.');
-  }
-  return parseFloat(raw) || 0;
-};
-const radio = name => parseFloat(document.querySelector(`input[name="${name}"]:checked`)?.value) || 0;
+  const fmt = v => v.toLocaleString('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
 
-// Format large number inputs with thousand separators
-function formatNumInput(id) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  const val = g(id);
-  if (val > 0) el.value = fmtNum(val);
-}
-function attachNumFmt(id) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.addEventListener('focus', () => {
-    el.value = String(g(id) || '');
-  });
-  el.addEventListener('blur', () => formatNumInput(id));
-}
-
-function syncN(src, tgt) {
-  const s = document.getElementById(src), t = document.getElementById(tgt);
-  if (!s||!t) return;
-  const rawSrc = s.value.replace(/\./g,'').replace(',','.');
-  let v = parseFloat(rawSrc);
-  if (isNaN(v)) return;
-  if (t.min) v = Math.max(parseFloat(t.min), v);
-  if (t.max && parseFloat(t.max)>0) v = Math.min(parseFloat(t.max), v);
-  // Format large number fields, plain value for sliders and small fields
-  if (numFmtIds.includes(tgt) && t.type !== 'range') {
-    t.value = fmtNum(v);
-  } else if (numFmtIds.includes(src) && t.type === 'range') {
-    t.value = v;
-  } else {
-    t.value = v;
-  }
-  colorSlider(s.type==='range'?s:t.type==='range'?t:null);
-  calc();
-}
-
-function syncP(src, tgt) {
-  const s = document.getElementById(src), t = document.getElementById(tgt);
-  if (!s||!t) return;
-  let v = parseFloat(s.value);
-  if (isNaN(v)) return;
-  if (t.min!=='') v = Math.max(parseFloat(t.min), v);
-  if (t.max!=='') v = Math.min(parseFloat(t.max), v);
-  t.value = v;
-  colorSlider(s.type==='range'?s:t.type==='range'?t:null);
-  calc();
-}
-
-function colorSlider(s) {
-  if (!s||s.type!=='range') return;
-  const min=parseFloat(s.min)||0, max=parseFloat(s.max)||100, val=parseFloat(s.value);
-  const pct=((val-min)/(max-min))*100;
-  s.style.background=`linear-gradient(to right,#da7756 ${pct}%,#e8e5df ${pct}%)`;
-}
-
-const brancheLabels = {
-  '1.0|12':  'Multiplikator: 1,0× – typische Fluktuation: ~12 %',
-  '1.15|18': 'Multiplikator: 1,15× – typische Fluktuation: ~18 %',
-  '1.2|15':  'Multiplikator: 1,2× – typische Fluktuation: ~15 %',
-  '0.9|8':   'Multiplikator: 0,9× – typische Fluktuation: ~8 %',
-  '1.25|20': 'Multiplikator: 1,25× – typische Fluktuation: ~20 %',
-  '1.1|25':  'Multiplikator: 1,1× – typische Fluktuation: ~25 %',
-};
-const brancheNames = {
-  '1.0|12':'Allgemein','1.15|18':'Handel/Logistik','1.2|15':'Dienstleistung',
-  '0.9|8':'Produktion','1.25|20':'IT/Tech','1.1|25':'Gesundheit/Soziales'
-};
-
-document.querySelectorAll('input[name="branche"]').forEach(r => {
-  r.addEventListener('change', () => {
-    document.getElementById('brancheHint').textContent = brancheLabels[r.value]||'';
-    const fl = parseFloat(r.value.split('|')[1]);
-    document.getElementById('fluktHint').textContent =
-      `Ihrer Branche (${brancheNames[r.value]}): typisch ~${fl} %`;
-    calc();
-  });
-});
-
-function brancheMulti() {
-  const v = document.querySelector('input[name="branche"]:checked')?.value||'1.0|12';
-  return parseFloat(v.split('|')[0]);
-}
-
-function calc() {
-  const ma      = g('ma');
-  const brutto  = g('brutto');
-  const fakt    = g('fakt') || 1.35;
-  const vollK   = brutto * fakt;
-  const tagK    = vollK / 220;
-  const stdK    = vollK / (220*8);
-  const multi   = brancheMulti();
-
-  // Stammdaten
-  if (ma>0 && brutto>0) {
-    document.getElementById('stammPreview').style.display='flex';
-    document.getElementById('stammVal').textContent = fmt(ma * vollK);
-  }
-
-  // 1. Leistung (Basis 90 %)
-  const leistPct = g('leistS')/100;
-  const luecke   = 0.90 - leistPct;
-  const eLeist   = Math.max(0, ma * vollK * luecke * 0.30 * multi);
-  document.getElementById('leistVal').textContent = fmt(eLeist);
-
-  // 2. Fehlzeiten
-  const fehlTage = g('fehl');
-  const fehlmPct = g('fehlmS')/100;
-  const eFehl    = ma * fehlTage * fehlmPct * 0.5 * tagK * multi;
-  document.getElementById('fehlVal').textContent = fmt(eFehl);
-
-  // 3. Überstunden
-  const uestd    = g('uestd');
-  const ured     = g('uredS')/100;
-  const uzusch   = radio('uzusch') || 1.0;
-  const eUestd   = ma * uestd * ured * stdK * uzusch * multi;
-  document.getElementById('uestdVal').textContent = fmt(eUestd);
-
-  // 4. Fluktuation
-  const fluktPct = g('fluktS')/100;
-  const neuKost  = g('neuKostS')/100;
-  const recFak   = radio('recrut') || 0.8;
-  const eFlukt   = ma * fluktPct * 0.5 * vollK * neuKost * recFak * multi;
-  document.getElementById('fluktVal').textContent = fmt(eFlukt);
-
-  // 5. Kompensierbare Stellen
-  const komp  = g('komp');
-  const eKomp = komp * vollK / 2;
-  document.getElementById('kompVal').textContent = fmt(eKomp);
-
-  // 6. High-Performer
-  const hpIst  = g('hpIstS')/100;
-  const hpZiel = g('hpZielS')/100;
-  const hpDelta= Math.max(0, hpZiel - hpIst);
-  const eHP    = ma * hpDelta * vollK * 0.5 * multi;
-  document.getElementById('hpVal').textContent = fmt(eHP);
-
-  // 7. HR-Automatisierung (Basis: Personalkosten der HR-MA)
-  const hrMa   = g('hrMa');
-  const hrAuto = g('hrAutoS')/100;
-  const eHR    = hrMa * vollK * Math.min(hrAuto, 0.95);
-  document.getElementById('hrVal').textContent = fmt(eHR);
-
-  // Gesamt
-  const total = eLeist + eFehl + eUestd + eFlukt + eKomp + eHP + eHR;
-  document.getElementById('totalVal').textContent = total > 0 ? fmt(total) : '–';
-
-  // Balken
-  const items = [
-    {id:'leist', v:eLeist},{id:'hp', v:eHP},{id:'flukt', v:eFlukt},
-    {id:'fehl', v:eFehl},{id:'hr', v:eHR},{id:'uestd', v:eUestd},{id:'komp', v:eKomp}
+  const fields = [
+    'mitarbeiter', 'jahrgehalt', 'branche',
+    'fluktuationsrate', 'neubesetzungskosten',
+    'hr-mitarbeiter', 'hr-gehalt', 'manuell-anteil',
+    'krankenquote', 'arbeitstage'
   ];
-  const maxV = Math.max(...items.map(i=>i.v), 1);
-  items.forEach(({id,v}) => {
-    const el = document.getElementById('r-'+id);
-    const bar= document.getElementById('rb-'+id);
-    if (el)  el.textContent  = fmt(v);
-    if (bar) bar.style.width = Math.round((v/maxV)*100)+'%';
+  const radios = ['recruiting', 'diggrad', 'bem'];
+
+  function getVal(id) {
+    return parseFloat(document.getElementById(id).value) || 0;
+  }
+  function getRadio(name) {
+    const el = document.querySelector(`input[name="${name}"]:checked`);
+    return el ? parseFloat(el.value) : null;
+  }
+  function getSelect(id) {
+    const el = document.getElementById(id);
+    return parseFloat(el.value) || 1.0;
+  }
+
+  function filledCount() {
+    let count = 0;
+    fields.forEach(id => { if (getVal(id) > 0 || id === 'branche') count++; });
+    if (document.getElementById('branche').value !== '1.0') count++;
+    radios.forEach(() => count++); // always selected
+    return count;
+  }
+
+  function updateProgress() {
+    const numFields = fields.length;
+    let filled = 0;
+    fields.forEach(id => {
+      const v = id === 'branche'
+        ? document.getElementById(id).value !== '1.0'
+        : getVal(id) > 0;
+      if (v) filled++;
+    });
+    const pct = Math.round((filled / numFields) * 100);
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('pct-label').textContent = pct + ' %';
+  }
+
+  function calculate() {
+    updateProgress();
+
+    const MA       = getVal('mitarbeiter');
+    const AG       = getVal('jahrgehalt');
+    const branche  = getSelect('branche');
+    const fluktP   = getVal('fluktuationsrate') / 100;
+    const neuKost  = getVal('neubesetzungskosten');
+    const hrMA     = getVal('hr-mitarbeiter');
+    const hrAG     = getVal('hr-gehalt');
+    const manuP    = getVal('manuell-anteil') / 100;
+    const digFaktor= getRadio('diggrad') ?? 0.3;
+    const krankenP = getVal('krankenquote') / 100;
+    const arbTage  = getVal('arbeitstage') || 220;
+    const bemFaktor= getRadio('bem') ?? 0.15;
+
+    // Minimum data check
+    const hasBase = MA > 0 && AG > 0;
+
+    // 1. Fluktuation
+    let einspFlukt = 0;
+    if (hasBase && fluktP > 0 && neuKost > 0) {
+      const abgaenge = MA * fluktP;
+      // Branchenkorrektur + 20% Reduktionshebel
+      einspFlukt = abgaenge * neuKost * branche * 0.20;
+    }
+
+    // 2. Admin-Automatisierung
+    let einspAdmin = 0;
+    if (hrMA > 0 && hrAG > 0 && manuP > 0) {
+      const hrLohnSumme = hrMA * hrAG;
+      // digFaktor = Verbesserungspotenzial abhängig vom Digitalisierungsgrad
+      einspAdmin = hrLohnSumme * manuP * digFaktor;
+    }
+
+    // 3. Fehlzeiten
+    let einspFehl = 0;
+    if (hasBase && krankenP > 0) {
+      const tagessatz = AG / arbTage;
+      const kranktage = MA * arbTage * krankenP;
+      // bemFaktor = Reduktionspotenzial je nach BEM-Reifegrad
+      einspFehl = kranktage * tagessatz * bemFaktor * branche;
+    }
+
+    const gesamt = einspFlukt + einspAdmin + einspFehl;
+
+    // Show result
+    const section = document.getElementById('result-section');
+    if (hasBase || (hrMA > 0 && hrAG > 0)) {
+      section.style.opacity = '1';
+      section.style.pointerEvents = 'auto';
+    }
+
+    document.getElementById('result-total').textContent = fmt(gesamt);
+    document.getElementById('result-sub').textContent =
+      gesamt > 0
+        ? `Auf Basis Ihrer Angaben – konservativ gerechnet, realistisch erreichbar.`
+        : `Ergänzen Sie weitere Felder für eine vollständige Schätzung.`;
+
+    // Breakdown
+    const max = Math.max(einspFlukt, einspAdmin, einspFehl, 1);
+
+    function setBlock(valId, barId, val) {
+      const el = document.getElementById(valId);
+      el.textContent = val > 0 ? fmt(val) : 'Angaben fehlen';
+      el.className = 'breakdown-value' + (val <= 0 ? ' zero' : '');
+      document.getElementById(barId).style.width = (val / max * 100) + '%';
+    }
+    setBlock('val-flukt', 'bar-flukt', einspFlukt);
+    setBlock('val-admin', 'bar-admin', einspAdmin);
+    setBlock('val-fehl',  'bar-fehl',  einspFehl);
+
+    // Assumptions
+    const list = document.getElementById('assumptions-list');
+    list.innerHTML = '';
+    const items = [];
+
+    if (hasBase && fluktP > 0 && neuKost > 0) {
+      const abgaenge = (MA * fluktP).toFixed(1);
+      items.push(`Fluktuation: ${abgaenge} Abgänge × ${fmt(neuKost)} Kosten × Branchenfaktor ${branche} × 20 % Reduktionshebel = ${fmt(einspFlukt)}`);
+    } else {
+      items.push('Fluktuation: Mitarbeiter, Gehalt, Fluktuationsrate und Neubesetzungskosten erforderlich.');
+    }
+    if (hrMA > 0 && hrAG > 0 && manuP > 0) {
+      items.push(`Admin: ${hrMA} HR-MA × ${fmt(hrAG)} Gehalt × ${(manuP*100).toFixed(0)} % manuell × ${(digFaktor*100).toFixed(0)} % Automatisierungshebel = ${fmt(einspAdmin)}`);
+    } else {
+      items.push('Admin: HR-Teamgröße, HR-Gehalt und manueller Anteil erforderlich.');
+    }
+    if (hasBase && krankenP > 0) {
+      const tagessatz = AG / arbTage;
+      const kranktage = (MA * arbTage * krankenP).toFixed(0);
+      items.push(`Fehlzeiten: ${kranktage} Kranktage × ${fmt(tagessatz)} Tagessatz × ${(bemFaktor*100).toFixed(0)} % BEM-Hebel × Branchenfaktor ${branche} = ${fmt(einspFehl)}`);
+    } else {
+      items.push('Fehlzeiten: Mitarbeiter, Gehalt und Krankenquote erforderlich.');
+    }
+
+    items.forEach(text => {
+      const li = document.createElement('li');
+      li.textContent = text;
+      list.appendChild(li);
+    });
+  }
+
+  // Wire up listeners
+  fields.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', calculate);
   });
-}
+  radios.forEach(name => {
+    document.querySelectorAll(`input[name="${name}"]`).forEach(el => {
+      el.addEventListener('change', calculate);
+    });
+  });
 
-// Kundenzufriedenheit Risikobox
-const kzufData = {
-  4: { cls:'risk-green',  label:'Geringes Verlustrisiko',          text:'Ihre Kunden sind zufrieden – Bindung aktiv pflegen, um dieses Niveau zu halten.' },
-  3: { cls:'risk-yellow', label:'Moderates Verlustrisiko',         text:'Kundenbindung beobachten, Personal sensibilisieren.' },
-  2: { cls:'risk-amber',  label:'Erhöhtes Verlustrisiko',          text:'Konkrete Verbesserungsmaßnahmen erarbeiten – bevor Kunden die Initiative übernehmen.' },
-  1: { cls:'risk-red',    label:'Kritisches Verlustrisiko',        text:'Akuter Handlungsbedarf. Ein verlorener Schlüsselkunde bedeutet oft sofortigen Liquiditätsdruck.' },
-};
-
-function updateRisiko() {
-  const box = document.getElementById('risikoBox');
-  const val = parseInt(document.querySelector('input[name="kzuf"]:checked')?.value || 0);
-  if (!val) { box.style.display='none'; return; }
-  const d = kzufData[val];
-  box.className = 'risk-box ' + d.cls;
-  box.innerHTML = `<strong>${d.label}</strong>${d.text}`;
-  box.style.display = 'block';
-}
-
-document.querySelectorAll('input[name="kzuf"]').forEach(el => el.addEventListener('change', updateRisiko));
-
-// Init
-numFmtIds.forEach(id => attachNumFmt(id));
-document.querySelectorAll('input[type="range"]').forEach(s => {
-  s.addEventListener('input', () => colorSlider(s));
-  colorSlider(s);
-});
-document.querySelectorAll('input[type="radio"]').forEach(el => el.addEventListener('change', calc));
-document.querySelectorAll('input[type="number"]').forEach(el => {
-  el.addEventListener('input', calc);
-  el.addEventListener('change', calc);
-});
-calc();
-numFmtIds.forEach(id => formatNumInput(id));
+  // Initial render
+  calculate();
 </script>
-
 </body>
 </html>
