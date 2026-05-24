@@ -557,8 +557,8 @@
     <div class="field">
       <label class="field-label">Jährliche Fluktuationsrate</label>
       <div class="slider-wrap">
-        <input type="range" id="fluktS" min="2" max="40" value="12" step="1" oninput="syncP('fluktS','fluktN')">
-        <input type="number" id="fluktN" class="pct-field" value="12" min="2" max="40" oninput="syncP('fluktN','fluktS')">
+        <input type="range" id="fluktS" min="1" max="40" value="12" step="1" oninput="syncP('fluktS','fluktN')">
+        <input type="number" id="fluktN" class="pct-field" value="12" min="1" max="40" oninput="syncP('fluktN','fluktS')">
       </div>
       <div class="hint" id="fluktHint">Ihrer Branche (Allgemein): typisch ~12 %</div>
     </div>
@@ -651,10 +651,10 @@
     <div class="field">
       <label class="field-label">Gewünschter Automatisierungsgrad</label>
       <div class="slider-wrap">
-        <input type="range" id="hrAutoS" min="0" max="100" value="70" step="5" oninput="syncP('hrAutoS','hrAutoN')">
-        <input type="number" id="hrAutoN" class="pct-field" value="70" min="0" max="100" oninput="syncP('hrAutoN','hrAutoS')">
+        <input type="range" id="hrAutoS" min="0" max="95" value="60" step="5" oninput="syncP('hrAutoS','hrAutoN')">
+        <input type="number" id="hrAutoN" class="pct-field" value="60" min="0" max="95" oninput="syncP('hrAutoN','hrAutoS')">
       </div>
-      <div class="hint">40–60 % für Teilprozesse · bis zu 95 % bei vollständiger Systemablösung</div>
+      <div class="hint">40–60 % für Teilprozesse · Maximum: 95 % (vollständige Systemablösung)</div>
     </div>
     <div class="inline-result">
       <span class="ir-label">Einsparpotenzial durch Automatisierung HR/Buchhaltung</span>
@@ -810,7 +810,7 @@ function attachNumFmt(id) {
 function syncN(src, tgt) {
   const s = document.getElementById(src), t = document.getElementById(tgt);
   if (!s||!t) return;
-  const rawSrc = s.value.replace(/\./g,'').replace(',','.');
+  const rawSrc = numFmtIds.includes(src) ? s.value.replace(/\./g,'').replace(',','.') : s.value.replace(',','.');
   let v = parseFloat(rawSrc);
   if (isNaN(v)) return;
   if (t.min) v = Math.max(parseFloat(t.min), v);
