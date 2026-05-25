@@ -348,8 +348,6 @@
 
     /* ── CTA ── */
     .cta-block {
-      border-top: 0.5px solid rgba(255,255,255,0.1);
-      padding-top: 1.5rem;
       text-align: center;
     }
     .cta-intro {
@@ -690,7 +688,7 @@
     <div class="field" style="margin-top:1rem;">
       <label class="field-label">Was kostet Sie ein verlorener Schlüsselkunde?</label>
       <div class="slider-wrap">
-        <input type="range" id="kundenInvS" min="0" max="500000" value="0" step="5000" oninput="syncN('kundenInvS','kundenInv');clearTimeout(window._kht);var _kh=document.getElementById('kundenHint');_kh.innerHTML='<span class=\'kdots\'><span>·</span><span>·</span><span>·</span></span>';_kh.style.visibility='visible';window._kht=setTimeout(()=>{var txt='Und jetzt?',i=0;_kh.innerHTML='';var t=setInterval(()=>{_kh.innerHTML+=txt[i++];if(i>=txt.length)clearInterval(t);},60);},1200);">
+        <input type="range" id="kundenInvS" min="0" max="500000" value="0" step="5000" oninput="syncN('kundenInvS','kundenInv');clearTimeout(window._kht);var _kh=document.getElementById('kundenHint');_kh.innerHTML='<span class=\'kdots\'><span>·</span><span>·</span><span>·</span></span>';_kh.style.visibility='visible';window._kht=setTimeout(()=>{var txt='Und jetzt?',i=0;_kh.innerHTML='';var t=setInterval(()=>{_kh.innerHTML+=txt[i++];if(i>=txt.length)clearInterval(t);},101);},1200);">
         <input type="text" id="kundenInv" value="" inputmode="numeric" oninput="syncN('kundenInv','kundenInvS');clearTimeout(window._kht);var _kh=document.getElementById('kundenHint');_kh.innerHTML='<span class=\'kdots\'><span>·</span><span>·</span><span>·</span></span>';_kh.style.visibility='visible';window._kht=setTimeout(()=>{var txt='Und jetzt?',i=0;_kh.innerHTML='';var t=setInterval(()=>{_kh.innerHTML+=txt[i++];if(i>=txt.length)clearInterval(t);},90);},1200);" style="max-width:110px">
       </div>
       <div class="hint" id="kundenHint" style="visibility:hidden;margin-top:0.6rem;min-height:1.3rem;white-space:nowrap;">Und jetzt?</div>
