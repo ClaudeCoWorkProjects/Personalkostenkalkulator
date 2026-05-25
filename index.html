@@ -310,7 +310,7 @@
       font-weight: 700;
       letter-spacing: -0.03em;
       line-height: 1;
-      margin-bottom: 0.35rem;
+      margin-bottom: 0.85rem;
     }
     .result-disclaimer {
       font-size: 0.75rem;
@@ -357,6 +357,12 @@
       color: rgba(245,244,239,0.65);
       margin-bottom: 1rem;
     }
+    @keyframes pulse { 0%,100%{opacity:.2} 50%{opacity:1} }
+    .kdots span { animation: pulse 1s infinite; font-size:0.81rem; letter-spacing:2px; }
+    .kdots span:nth-child(2) { animation-delay:.2s; }
+    .kdots span:nth-child(3) { animation-delay:.4s; }
+    .cta-line1 { font-size: 0.9rem; font-weight: 600; color: #f5f4ef; }
+    .cta-year  { font-size: 0.9rem; font-weight: 600; color: #fbbf24; margin-bottom: 1rem; }
     .cta-btns { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
     .cta-btn {
       display: inline-flex;
@@ -402,7 +408,7 @@
     <div class="header-badge">⚡ Potenzialrechner © Jens Meyer</div>
     <div class="header-gallup">Gallup beziffert den volkswirtschaftlichen Schaden durch innere Kündigung</div>
     <div class="header-gallup2">auf 118–151 Mrd. € jährlich.</div>
-    <h1>Welches Einsparpotenzial<br>hat <span class="hl">Ihr</span> Unternehmen?</h1>
+    <h1>Welches Eisparpotenzial<br>hat <span class="hl">Ihr</span> Unternehmen?</h1>
     <div class="header-tagline">9 Fragen. &nbsp; 3 Minuten. &nbsp; Eine Zahl.</div>
   </div>
 </header>
@@ -463,10 +469,6 @@
   <div class="section-label">Schritt 1 · Das Kernproblem</div>
   <div class="card">
     <div class="card-title">Durchschnittliche Leistungsbereitschaft</div>
-    <div class="card-desc">
-      <p>Wie viel der möglichen Arbeitsleistung rufen Ihre Mitarbeiter ab?</p>
-      <p>Gallup-Index DE: Schnitt ≈ 68 % – in KMU außerhalb der Top 20 % realistisch eher 55–65 %.</p>
-    </div>
     <div class="field">
       <label class="field-label">Aktuell abgerufene Leistung</label>
       <div class="slider-wrap">
@@ -476,9 +478,10 @@
       <div class="hint">Basis: 90 % als realistisches Maximum – 100 % ist keine Planungsgröße.</div>
     </div>
     <div class="inline-result">
-      <span class="ir-label">Einsparpotenzial durch Leistungssteigerung</span>
+      <span class="ir-label">Vermeidbare Kosten durch Leistungssteigerung</span>
       <span class="ir-value" id="leistVal">–</span>
     </div>
+    <div class="hint" style="margin-top:0.5rem;">Studien belegen: KMU bezahlen 15–25 % für Potenzial, das nie abgerufen wird. (Gallup, DAK, Kienbaum, DGFP)</div>
   </div>
 
   <!-- ─── FEHLZEITEN ─── -->
@@ -504,7 +507,7 @@
       </div>
     </div>
     <div class="inline-result">
-      <span class="ir-label">Einsparpotenzial durch besseres Betriebsklima &amp; Mitarbeiter-Commitment</span>
+      <span class="ir-label">Vermeidbare Kosten durch besseres Betriebsklima &amp; Mitarbeiter-Commitment</span>
       <span class="ir-value" id="fehlVal">–</span>
     </div>
     <div class="hint">(Halbierung der motivationsbedingten Fehlzeiten)</div>
@@ -541,7 +544,7 @@
       </div>
     </div>
     <div class="inline-result">
-      <span class="ir-label">Einsparpotenzial durch Produktivitätssteigerung</span>
+      <span class="ir-label">Vermeidbare Kosten durch Produktivitätssteigerung</span>
       <span class="ir-value" id="uestdVal">–</span>
     </div>
   </div>
@@ -578,7 +581,7 @@
       </div>
     </div>
     <div class="inline-result">
-      <span class="ir-label">Einsparpotenzial durch Halbierung der Fluktuation</span>
+      <span class="ir-label">Vermeidbare Kosten durch Halbierung der Fluktuation</span>
       <span class="ir-value" id="fluktVal">–</span>
     </div>
   </div>
@@ -599,7 +602,7 @@
       </div>
     </div>
     <div class="inline-result">
-      <span class="ir-label">Einsparpotenzial (über 2 Jahre verteilt)</span>
+      <span class="ir-label">Vermeidbare Kosten (über 2 Jahre verteilt)</span>
       <span class="ir-value" id="kompVal">–</span>
     </div>
   </div>
@@ -657,7 +660,7 @@
       <div class="hint">40–60 % für Teilprozesse · Maximum: 95 % (vollständige Systemablösung)</div>
     </div>
     <div class="inline-result">
-      <span class="ir-label">Einsparpotenzial durch Automatisierung HR/Buchhaltung</span>
+      <span class="ir-label">Vermeidbare Kosten durch Automatisierung HR/Buchhaltung</span>
       <span class="ir-value" id="hrVal">–</span>
     </div>
     <div class="hint" style="margin-top:0.5rem;">*abhängig vom Nutzungsgrad eingesetzter Systeme und Doppelfunktionen.</div>
@@ -685,27 +688,23 @@
     <div class="risk-box" id="risikoBox" style="display:none"></div>
 
     <div class="field" style="margin-top:1rem;">
-      <label class="field-label">Welche Summe würden Sie investieren, um das Risiko eines Kundenverlusts deutlich zu reduzieren?</label>
+      <label class="field-label">Was kostet Sie ein verlorener Schlüsselkunde?</label>
       <div class="slider-wrap">
-        <input type="range" id="kundenInvS" min="0" max="500000" value="0" step="5000" oninput="syncN('kundenInvS','kundenInv')">
-        <input type="text" id="kundenInv" value="" inputmode="numeric" oninput="syncN('kundenInv','kundenInvS')" style="max-width:110px">
+        <input type="range" id="kundenInvS" min="0" max="500000" value="0" step="5000" oninput="syncN('kundenInvS','kundenInv');clearTimeout(window._kht);var _kh=document.getElementById('kundenHint');_kh.innerHTML='<span class=\'kdots\'><span>·</span><span>·</span><span>·</span></span>';_kh.style.visibility='visible';window._kht=setTimeout(()=>{var txt='Und jetzt?',i=0;_kh.innerHTML='';var t=setInterval(()=>{_kh.innerHTML+=txt[i++];if(i>=txt.length)clearInterval(t);},60);},1200);">
+        <input type="text" id="kundenInv" value="" inputmode="numeric" oninput="syncN('kundenInv','kundenInvS');clearTimeout(window._kht);var _kh=document.getElementById('kundenHint');_kh.innerHTML='<span class=\'kdots\'><span>·</span><span>·</span><span>·</span></span>';_kh.style.visibility='visible';window._kht=setTimeout(()=>{var txt='Und jetzt?',i=0;_kh.innerHTML='';var t=setInterval(()=>{_kh.innerHTML+=txt[i++];if(i>=txt.length)clearInterval(t);},90);},1200);" style="max-width:110px">
       </div>
-      <div class="hint">Probleme lösen sich nicht - sie werden teuer.</div>
+      <div class="hint" id="kundenHint" style="visibility:hidden;margin-top:0.6rem;min-height:1.3rem;white-space:nowrap;">Und jetzt?</div>
     </div>
   </div>
 
   <!-- ─── ERGEBNIS ─── -->
   <div class="result-card">
-    <div class="result-title">Langfristiges Einsparpotenzial p.a.</div>
+    <div class="result-title">Vermeidbare Kosten p.a.</div>
     <div class="result-total" id="totalVal">–</div>
-    <div class="result-disclaimer">
-      Studien belegen: KMU bezahlen 15–25 % für Potenzial, das nie abgerufen wird.<br>
-      (Gallup, DAK, Kienbaum, DGFP)
-    </div>
 
     <div class="result-grid">
       <div class="result-item">
-        <div class="result-item-label">Leistungslücke (bestehendes Team)</div>
+        <div class="result-item-label">Leistungslücke</div>
         <div class="result-item-value" id="r-leist">–</div>
         <div class="result-item-bar-wrap"><div class="result-item-bar" id="rb-leist" style="width:0%"></div></div>
         <div class="result-item-pct" id="rp-leist"></div>
@@ -753,7 +752,8 @@
     </div>
 
     <div class="cta-block">
-      <div class="cta-intro">Soll ich das für Sie umsetzen?</div>
+      <div class="cta-line1"><span id="ctaSum">–</span> geben Sie zu viel aus.</div>
+      <div class="cta-year">Jedes Jahr.</div>
       <div class="cta-btns">
         <a class="cta-btn" href="mailto:jensmeyer1974@icloud.com?subject=Potenzialrechner%20%E2%80%93%20Kontaktanfrage">
           ✉ Kontakt – Jens Meyer
@@ -936,6 +936,8 @@ function calc() {
   // Gesamt
   const total = eLeist + eFehl + eUestd + eFlukt + eKomp + eHP + eHR;
   document.getElementById('totalVal').textContent = total > 0 ? fmt(total) : '–';
+  const ctaSumEl = document.getElementById('ctaSum');
+  if (ctaSumEl) ctaSumEl.textContent = total > 0 ? fmt(total) : '–';
 
   // Balken
   const items = [
