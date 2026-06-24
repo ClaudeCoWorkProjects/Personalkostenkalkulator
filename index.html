@@ -1,404 +1,191 @@
 <!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- saved from url=(0064)https://claudecoworkprojects.github.io/Personalkostenkalkulator/ -->
+<html lang="de"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Potenzialrechner © Jens Meyer</title>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --bg: #f9f9f8;
-      --surface: #ffffff;
-      --surface-2: #f5f4ef;
-      --border: #e8e5df;
-      --orange: #da7756;
-      --orange-light: rgba(217,119,6,0.09);
-      --orange-border: rgba(217,119,6,0.2);
-      --orange-text: #b45309;
-      --icloud: #0071e3;
-      --icloud-dark: #0058b0;
-      --text: #1a1a18;
-      --text-2: #4a4a45;
-      --muted: #8a8a82;
-      --success: #15803d;
-      --radius: 16px;
-      --radius-sm: 8px;
-      --shadow: 0 1px 4px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.08);
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-    }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#1d1d1f;--sub:#6e6e73;--line:#1d1d1f;--green:#fbbf24;--radius:20px;--radius-sm:10px}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',Arial,sans-serif;background:#ececec;color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh}
+.header{background:transparent;color:#f5f4ef;text-align:left;max-width:720px;margin:0 auto;padding:0 22px;position:relative}
+.header::before{display:none}
+.header-inner{position:relative;z-index:1;background:#1a1a18;color:#f5f4ef;border-radius:0 0 16px 16px;padding:32px 30px 34px;overflow:hidden}
+.header-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(217,119,6,.22);border:.5px solid rgba(217,119,6,.45);border-radius:99px;padding:.25rem 1rem;font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:#fbbf24;margin-bottom:18px}
+.header-gallup{font-size:12px;color:rgba(245,244,239,.5);font-style:italic;margin-bottom:.2rem}
+.header-gallup2{font-size:12px;color:rgba(245,244,239,.5);font-style:italic;margin-bottom:1.4rem}
+.header h1{font-size:clamp(30px,5.5vw,48px);font-weight:600;line-height:1.08;letter-spacing:-.025em;color:#f5f4ef;margin-bottom:14px;text-align:left}
+.header h1 .hl{color:#fbbf24;font-weight:600}
+.header-tagline{font-size:15px;color:rgba(245,244,239,.6)}
+.container{max-width:720px;margin:0 auto;padding:0 22px 70px}
+.section-label{display:flex;align-items:center;gap:.7rem;font-size:13px;font-weight:600;letter-spacing:.02em;text-transform:uppercase;color:#3a3a3c;margin:44px 0 14px;padding-left:30px}
+.section-label::after{content:'';flex:1;height:1px;background:#d2d2d7}
+.card{background:#fff;border:none;border-radius:var(--radius);box-shadow:none;padding:28px 30px;margin-bottom:16px}
+.card-title{font-size:21px;font-weight:600;letter-spacing:-.01em;line-height:1.2;color:var(--ink);margin-bottom:.4rem}
+.card-desc{font-size:14px;font-weight:400;color:var(--sub);line-height:1.55;margin-bottom:1.1rem}
+.card-desc p{margin-bottom:.1rem}
+.card-desc p.dim{color:#a1a1a6}
+.field{margin-bottom:22px}
+.field:last-child{margin-bottom:0}
+label.field-label{display:block;font-size:15px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.hint{font-size:13px;font-weight:400;color:var(--sub);margin-top:.4rem}
+input[type="number"],input[type="text"]{padding:8px 12px;border:1px solid var(--line);border-radius:var(--radius-sm);font-size:15px;font-weight:500;color:var(--ink);background:#fff;-moz-appearance:textfield;appearance:textfield}
+input[type="number"]::-webkit-inner-spin-button{display:none}
+input[type="number"]:focus,input[type="text"]:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(251,191,36,.3)}
+.slider-wrap{display:flex;align-items:center;gap:18px;margin-top:.2rem}
+.slider-wrap input[type="range"]{flex:1;-webkit-appearance:none;appearance:none;height:4px;border-radius:99px;background:#d2d2d7;outline:none;cursor:pointer;border:none;padding:0}
+.slider-wrap input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;border:1px solid var(--line);cursor:pointer}
+.slider-wrap input[type="range"]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:1px solid var(--line);cursor:pointer}
+.pct-field{width:80px !important;text-align:center}
+.pct-suffix{margin-left:-.55rem;font-weight:400;font-size:15px;color:var(--sub)}
+.pill-group{display:flex;flex-wrap:wrap;gap:8px;margin-top:.35rem}
+.pill-group input[type="radio"]{display:none}
+.pill-group label{padding:8px 16px;border:1px solid var(--line);border-radius:99px;font-size:14px;font-weight:400;color:var(--ink);cursor:pointer;background:#fff}
+.pill-group input[type="radio"]:checked+label{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:500}
+.pill-group label:hover{border-color:var(--green)}
+.inline-result{background:transparent;border:none;border-top:1px solid var(--line);border-radius:0;padding:16px 2px 0;margin-top:20px;display:flex;align-items:center;justify-content:space-between;font-size:14px;gap:8px}
+.ir-label{color:var(--sub)}
+.ir-value{font-weight:600;font-size:17px;color:#15803d;white-space:nowrap}
+.ir-value.neutral{color:var(--ink)}
+.risk-box{border-radius:var(--radius-sm);padding:12px 16px;margin-top:14px;min-height:84px;font-size:13px;line-height:1.55;background:transparent;border:1px solid var(--line);color:var(--ink)}
+.risk-box.risk-green{background:rgba(21,128,61,.09);border:1px solid rgba(21,128,61,.4);color:#166534}.risk-box.risk-yellow{background:rgba(202,138,4,.10);border:1px solid rgba(202,138,4,.45);color:#854d0e}.risk-box.risk-amber{background:rgba(217,119,6,.11);border:1px solid rgba(217,119,6,.45);color:#b45309}.risk-box.risk-red{background:rgba(185,28,28,.10);border:1px solid rgba(185,28,28,.45);color:#991b1b}
+.risk-box strong{display:block;margin-bottom:.2rem;font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+.result-card{background:#1a1a18;color:#f5f4ef;border-radius:16px;padding:2rem;margin-top:2rem;box-shadow:0 1px 4px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.08);text-align:left}
+.result-title{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#fbbf24;margin-bottom:.4rem}
+.result-total{font-size:clamp(2.2rem,7vw,3rem);font-weight:700;letter-spacing:-.03em;line-height:1;margin-bottom:.85rem;color:#f5f4ef}
+.result-disclaimer{font-size:12px;color:#86868b;line-height:1.5;margin-bottom:1.6rem}
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.75rem;text-align:left}
+@media(max-width:500px){.result-grid{grid-template-columns:1fr}}
+.result-item{background:rgba(255,255,255,.06);border:.5px solid rgba(255,255,255,.1);border-radius:10px;padding:.9rem}
+.result-item-label{font-size:.72rem;opacity:.55;margin-bottom:.2rem}
+.result-item-value{font-size:1.05rem;font-weight:700;color:#f5f4ef}
+.result-item-bar-wrap{height:3px;background:rgba(255,255,255,.1);border-radius:99px;margin-top:.5rem;overflow:hidden}
+.result-item-bar{height:100%;border-radius:99px;background:#fbbf24}
+.result-item-pct{text-align:right;font-size:11px;color:#fbbf24;font-weight:500;margin-top:3px}
+.result-item.risk{background:rgba(217,119,6,.15);border:.5px solid rgba(217,119,6,.35)}
+.result-item.risk .result-item-label{color:rgba(245,244,239,.6)}
+.result-item.risk .result-item-value{color:#fbbf24;font-size:.82rem;font-style:italic;line-height:1.4;font-weight:400}
+.cta-block{text-align:center}
+.cta-intro{font-size:14px;color:#a1a1a6;margin-bottom:1rem}
+.kdots span{animation:pulse 1s infinite;font-size:.81rem;letter-spacing:2px}
+@keyframes pulse{0%,100%{opacity:.2}50%{opacity:1}}
+.kdots span:nth-child(2){animation-delay:.2s}
+.kdots span:nth-child(3){animation-delay:.4s}
+.cta-line1{font-size:15px;font-weight:500;color:#fff}
+.cta-year{font-size:15px;font-weight:600;color:#fbbf24;margin-bottom:1rem}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.cta-btn{display:inline-flex;align-items:center;gap:6px;background:#0071e3;color:#fff;border:none;border-radius:8px;padding:.7rem 1.4rem;font-size:.9rem;font-weight:600;cursor:pointer;text-decoration:none;transition:background .15s,transform .1s}
+.cta-btn:hover{background:#0058b0;transform:translateY(-1px)}
+.disclaimer{background:transparent;border:none;border-top:1px solid #d2d2d7;border-radius:0;padding:24px 2px 0;font-size:12px;color:var(--sub);line-height:1.6;margin-top:18px}
+.credit{text-align:center;font-size:12px;color:#a1a1a6;margin-top:1.6rem}
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      min-height: 100vh;
-    }
-
-    /* ── HEADER ── */
-    .header {
-      background: var(--text);
-      color: #f5f4ef;
-      padding: 2.75rem 2rem 2.25rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .header::before {
-      content: '';
-      position: absolute;
-      top: -60px; right: -60px;
-      width: 220px; height: 220px;
-      background: radial-gradient(circle, rgba(217,119,6,0.15) 0%, transparent 70%);
-      border-radius: 50%;
-    }
-    .header-inner { position: relative; z-index: 1; }
-
-    .header-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(217,119,6,0.22);
-      border: 0.5px solid rgba(217,119,6,0.45);
-      border-radius: 99px;
-      padding: 0.25rem 1rem;
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: #fbbf24;
-      margin-bottom: 2rem;
-    }
-
-    .header-gallup {
-      font-size: 12px;
-      color: rgba(245,244,239,0.5);
-      font-style: italic;
-      margin-bottom: 0.2rem;
-    }
-    .header-gallup2 {
-      font-size: 12px;
-      color: rgba(245,244,239,0.5);
-      font-style: italic;
-      margin-bottom: 1.5rem;
-    }
-
-    .header h1 {
-      font-size: clamp(1.6rem, 4vw, 2.2rem);
-      font-weight: 700;
-      line-height: 1.25;
-      letter-spacing: -0.02em;
-      color: #f5f4ef;
-      margin-bottom: 0.75rem;
-      text-align: center;
-    }
-    .header h1 .hl { color: #fbbf24; font-weight: 500; }
-
-    .header-tagline {
-      font-size: 13px;
-      color: rgba(245,244,239,0.55);
-      letter-spacing: 0.05em;
-    }
-
-    /* ── CONTAINER ── */
-    .container {
-      max-width: 740px;
-      margin: 0 auto;
-      padding: 2rem 1rem 5rem;
-    }
-
-    /* ── SECTION LABEL ── */
-    .section-label {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin: 2rem 0 0.75rem;
-    }
-    .section-label::after {
-      content: '';
-      flex: 1;
-      height: 0.5px;
-      background: var(--border);
-    }
-
-    /* ── CARDS ── */
-    .card {
-      background: var(--surface);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-sm);
-      padding: 1.5rem 1.75rem;
-      margin-bottom: 1rem;
-    }
-
-    .card-title {
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 0.3rem;
-    }
-    .card-desc {
-      font-size: 0.83rem;
-      color: var(--text-2);
-      line-height: 1.6;
-      margin-bottom: 1.1rem;
-    }
-    .card-desc p { margin-bottom: 0.1rem; }
-    .card-desc p.dim { color: var(--muted); }
-
-    /* ── FORM ── */
-    .field { margin-bottom: 1.1rem; }
-    .field:last-child { margin-bottom: 0; }
-
-    label.field-label {
-      display: block;
-      font-size: 0.81rem;
-      font-weight: 600;
-      color: var(--text-2);
-      margin-bottom: 0.4rem;
-    }
-    .hint {
-      font-size: 0.81rem;
-      color: var(--muted);
-      margin-top: 0.25rem;
-    }
-
-    input[type="number"] {
-      padding: 0.5rem 0.75rem;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      font-size: 0.88rem;
-      color: var(--text);
-      background: var(--surface);
-      -moz-appearance: textfield;
-      appearance: textfield;
-      transition: border-color 0.15s;
-    }
-    input[type="number"]::-webkit-inner-spin-button { display: none; }
-    input[type="number"]:focus {
-      outline: none;
-      border-color: var(--orange);
-      box-shadow: 0 0 0 3px rgba(218,119,86,0.12);
-    }
-
-    /* ── SLIDER ── */
-    .slider-wrap { display: flex; align-items: center; gap: 0.85rem; margin-top: 0.2rem; }
-    .slider-wrap input[type="range"] {
-      flex: 1;
-      -webkit-appearance: none;
-      appearance: none;
-      height: 4px;
-      border-radius: 99px;
-      background: var(--border);
-      outline: none;
-      cursor: pointer;
-      border: none;
-      box-shadow: none;
-      padding: 0;
-    }
-    .slider-wrap input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 18px; height: 18px;
-      border-radius: 50%;
-      background: var(--orange);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-      cursor: pointer;
-      transition: transform 0.1s;
-    }
-    .slider-wrap input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
-    .slider-wrap input[type="range"]::-moz-range-thumb {
-      width: 18px; height: 18px;
-      border-radius: 50%;
-      background: var(--orange);
-      border: none;
-      cursor: pointer;
-    }
-
-    .pct-field {
-      width: 62px !important;
-      text-align: center;
-      font-weight: 600;
-      color: var(--orange-text) !important;
-      background: var(--orange-light) !important;
-      border-color: var(--orange-border) !important;
-      padding: 0.3rem 0.4rem !important;
-      font-size: 0.85rem !important;
-    }
-    .pct-field:focus {
-      background: white !important;
-      border-color: var(--orange) !important;
-    }
-
-    /* ── PILLS ── */
-    .pill-group { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 0.35rem; }
-    .pill-group input[type="radio"] { display: none; }
-    .pill-group label {
-      padding: 0.3rem 0.85rem;
-      border: 0.5px solid var(--border);
-      border-radius: 99px;
-      font-size: 0.81rem;
-      font-weight: 500;
-      color: var(--text-2);
-      cursor: pointer;
-      transition: all 0.15s;
-      background: var(--surface);
-    }
-    .pill-group input[type="radio"]:checked + label {
-      background: var(--orange);
-      border-color: var(--orange);
-      color: white;
-      font-weight: 600;
-    }
-    .pill-group label:hover { border-color: var(--orange); color: var(--orange); }
-
-    /* ── INLINE RESULT ── */
-    .inline-result {
-      background: var(--surface-2);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 0.6rem 1rem;
-      margin-top: 0.75rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 0.82rem;
-      gap: 8px;
-    }
-    .ir-label { color: var(--muted); }
-    .ir-value { font-weight: 700; color: var(--success); white-space: nowrap; }
-    .ir-value.neutral { color: var(--text); }
-
-    /* ── RISK BOX ── */
-    .risk-box {
-      border-radius: var(--radius-sm);
-      padding: 0.75rem 1rem;
-      margin-top: 0.85rem;
-      font-size: 0.81rem;
-      line-height: 1.6;
-    }
-    .risk-box.risk-green  { background: rgba(21,128,61,0.07); border: 0.5px solid rgba(21,128,61,0.3); color: #166534; }
-    .risk-box.risk-yellow { background: rgba(202,138,4,0.08); border: 0.5px solid rgba(202,138,4,0.35); color: #854d0e; }
-    .risk-box.risk-amber  { background: rgba(217,119,6,0.09); border: 0.5px solid rgba(217,119,6,0.35); color: var(--orange-text); }
-    .risk-box.risk-red    { background: rgba(185,28,28,0.08); border: 0.5px solid rgba(185,28,28,0.35); color: #991b1b; }
-    .risk-box strong { display: block; margin-bottom: 0.2rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; }
-
-    /* ── RESULT CARD ── */
-    .result-card {
-      background: var(--text);
-      color: #f5f4ef;
-      border-radius: var(--radius);
-      padding: 2rem;
-      margin-top: 2rem;
-      box-shadow: var(--shadow);
-    }
-    .result-title {
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #fbbf24;
-      margin-bottom: 0.4rem;
-    }
-    .result-total {
-      font-size: clamp(2rem, 6vw, 3rem);
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      line-height: 1;
-      margin-bottom: 0.85rem;
-    }
-    .result-disclaimer {
-      font-size: 0.75rem;
-      color: rgba(245,244,239,0.42);
-      font-style: italic;
-      line-height: 1.55;
-      margin-bottom: 1.75rem;
-    }
-
-    .result-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-      margin-bottom: 1.75rem;
-    }
-    @media (max-width: 500px) { .result-grid { grid-template-columns: 1fr; } }
-
-    .result-item {
-      background: rgba(255,255,255,0.06);
-      border: 0.5px solid rgba(255,255,255,0.1);
-      border-radius: var(--radius-sm);
-      padding: 0.9rem;
-    }
-    .result-item-label { font-size: 0.72rem; opacity: 0.55; margin-bottom: 0.2rem; }
-    .result-item-value { font-size: 1.05rem; font-weight: 700; }
-    .result-item-bar-wrap { height: 3px; background: rgba(255,255,255,0.1); border-radius: 99px; margin-top: 0.5rem; overflow: hidden; }
-    .result-item-bar { height: 100%; border-radius: 99px; background: #fbbf24; }
-    .result-item-pct { text-align: right; font-size: 11px; color: #fbbf24; font-weight: 500; margin-top: 3px; }
-    .result-item.risk {
-      background: rgba(217,119,6,0.15);
-      border-color: rgba(217,119,6,0.35);
-    }
-    .result-item.risk .result-item-label { color: rgba(245,244,239,0.6); }
-    .result-item.risk .result-item-value { color: #fbbf24; font-size: 0.82rem; font-style: italic; line-height: 1.4; font-weight: 400; }
-
-    /* ── CTA ── */
-    .cta-block {
-      text-align: center;
-    }
-    .cta-intro {
-      font-size: 0.88rem;
-      color: rgba(245,244,239,0.65);
-      margin-bottom: 1rem;
-    }
-    @keyframes pulse { 0%,100%{opacity:.2} 50%{opacity:1} }
-    .kdots span { animation: pulse 1s infinite; font-size:0.81rem; letter-spacing:2px; }
-    .kdots span:nth-child(2) { animation-delay:.2s; }
-    .kdots span:nth-child(3) { animation-delay:.4s; }
-    .cta-line1 { font-size: 0.9rem; font-weight: 600; color: #f5f4ef; }
-    .cta-year  { font-size: 0.9rem; font-weight: 600; color: #fbbf24; margin-bottom: 1rem; }
-    .cta-btns { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
-    .cta-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--icloud);
-      color: white;
-      border: none;
-      border-radius: var(--radius-sm);
-      padding: 0.7rem 1.4rem;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.15s, transform 0.1s;
-    }
-    .cta-btn:hover { background: var(--icloud-dark); transform: translateY(-1px); }
-    .cta-btn:active { transform: translateY(0); }
-
-    /* ── FOOTER ── */
-    .disclaimer {
-      background: var(--surface-2);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 0.9rem 1.1rem;
-      font-size: 0.76rem;
-      color: var(--muted);
-      line-height: 1.65;
-      margin-top: 1rem;
-    }
-    .credit {
-      text-align: center;
-      font-size: 0.72rem;
-      color: var(--muted);
-      margin-top: 2rem;
-    }
-  </style>
-</head>
+</style>
+<style type="text/css">.src-service-contentScript-browser-contentScript-contentScript__toolFrame--2uksu {
+  position: fixed !important;
+  right: 0 !important;
+  top: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 2147483646 !important;
+  border: none !important;
+}
+.src-service-contentScript-browser-contentScript-contentScript__web-clipper-loading-box--fHTwh {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2147483646;
+  border: none;
+}
+.src-service-contentScript-browser-contentScript-contentScript__web-clipper-loading-box--fHTwh .web-clipper-loading {
+  position: fixed;
+  right: 10px;
+  top: 10px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 12px 0px;
+  background: white;
+  width: 324px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.src-service-contentScript-browser-contentScript-contentScript__web-clipper-loading-box--fHTwh .web-clipper-loading .line {
+  animation: src-service-contentScript-browser-contentScript-contentScript__expand--31ZFO 1s ease-in-out infinite;
+  border-radius: 10px;
+  display: inline-block;
+  transform-origin: center center;
+  margin: 0 3px;
+  width: 1px;
+  height: 25px;
+}
+.src-service-contentScript-browser-contentScript-contentScript__web-clipper-loading-box--fHTwh .web-clipper-loading .line:nth-child(1) {
+  background: #27ae60;
+}
+.src-service-contentScript-browser-contentScript-contentScript__web-clipper-loading-box--fHTwh .web-clipper-loading .line:nth-child(2) {
+  animation-delay: 180ms;
+  background: #f1c40f;
+}
+.src-service-contentScript-browser-contentScript-contentScript__web-clipper-loading-box--fHTwh .web-clipper-loading .line:nth-child(3) {
+  animation-delay: 360ms;
+  background: #e67e22;
+}
+.src-service-contentScript-browser-contentScript-contentScript__web-clipper-loading-box--fHTwh .web-clipper-loading .line:nth-child(4) {
+  animation-delay: 540ms;
+  background: #2980b9;
+}
+@keyframes src-service-contentScript-browser-contentScript-contentScript__expand--31ZFO {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(2);
+  }
+}
+</style><style type="text/css">#index_crossLine__2WHMH {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  z-index: 2147483645;
+}
+#index_crossLine__2WHMH::before {
+  border: none;
+  content: '';
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  z-index: 2147483645;
+  border-right: 1px solid red;
+  border-bottom: 1px solid red;
+  left: -100%;
+  top: -100%;
+}
+#index_crossLine__2WHMH::after {
+  border: none;
+  content: '';
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  z-index: 2147483645;
+  border-top: 1px solid red;
+  border-left: 1px solid red;
+  left: 0;
+  top: 0;
+}
+#index_selectArea__2G3Z3 {
+  border: 1px solid red;
+  position: fixed;
+  z-index: 2147483645;
+}
+</style><style type="text/css">.index_highlightSelector__-qiHd {
+  background-color: #fafafa !important;
+  outline: 3px dashed #1976d2 !important;
+  opacity: 0.8 !important;
+  cursor: pointer !important;
+  transition: opacity 0.5s ease !important;
+}
+</style></head>
 <body>
 
 <header class="header">
@@ -422,44 +209,44 @@
     <div class="field">
       <label class="field-label">Anzahl Mitarbeiter</label>
       <div class="slider-wrap">
-        <input type="range" id="maS" min="5" max="500" value="50" step="5" oninput="syncN('maS','ma')">
-        <input type="number" id="ma" value="50" min="1" max="9999" oninput="syncN('ma','maS')" style="max-width:88px">
+        <input type="range" id="maS" min="5" max="500" value="50" step="5" oninput="syncN(&#39;maS&#39;,&#39;ma&#39;)" style="background: linear-gradient(to right, rgb(218, 119, 86) 5.05051%, rgb(232, 229, 223) 5.05051%);">
+        <input type="number" id="ma" value="50" min="1" max="9999" oninput="syncN(&#39;ma&#39;,&#39;maS&#39;)" style="max-width:80px">
       </div>
     </div>
 
     <div class="field">
       <label class="field-label">Jahresbruttogehalt je Mitarbeiter (€)</label>
       <div class="slider-wrap">
-        <input type="range" id="bruttoS" min="20000" max="120000" value="45000" step="1000" oninput="syncN('bruttoS','brutto')">
-        <input type="text" id="brutto" value="45.000" inputmode="numeric" oninput="syncN('brutto','bruttoS')" style="max-width:108px">
+        <input type="range" id="bruttoS" min="20000" max="120000" value="45000" step="1000" oninput="syncN(&#39;bruttoS&#39;,&#39;brutto&#39;)" style="background: linear-gradient(to right, rgb(218, 119, 86) 20%, rgb(232, 229, 223) 20%);">
+        <input type="text" id="brutto" value="45.000" inputmode="numeric" oninput="syncN(&#39;brutto&#39;,&#39;bruttoS&#39;)" style="max-width:108px">
       </div>
     </div>
 
     <div class="field">
       <label class="field-label">Gesamtkostenfaktor <span style="font-weight:400;color:var(--muted)">(SV, 13. Gehalt, Zusatzleistungen)</span></label>
       <div class="slider-wrap">
-        <input type="range" id="faktS" min="1.2" max="1.6" value="1.35" step="0.05" oninput="syncN('faktS','fakt')">
-        <input type="number" id="fakt" value="1.35" min="1.0" max="2.0" step="0.05" oninput="syncN('fakt','faktS')" style="max-width:80px">
+        <input type="range" id="faktS" min="1.2" max="1.6" value="1.35" step="0.05" oninput="syncN(&#39;faktS&#39;,&#39;fakt&#39;)" style="background: linear-gradient(to right, rgb(218, 119, 86) 37.5%, rgb(232, 229, 223) 37.5%);">
+        <input type="number" id="fakt" value="1.35" min="1.0" max="2.0" step="0.05" oninput="syncN(&#39;fakt&#39;,&#39;faktS&#39;)" style="max-width:80px">
       </div>
-      <div class="hint">Typisch 1,30–1,45 · inkl. SV-Anteil (~21 %), Sonderzahlungen & betriebliche Zusatzkosten</div>
+      <div class="hint">Typisch 1,30–1,45 · inkl. SV-Anteil (~21 %), Sonderzahlungen &amp; betriebliche Zusatzkosten</div>
     </div>
 
     <div class="field">
-      <label class="field-label">Branche <span style="font-weight:400;color:var(--muted)">(beeinflusst Fluktuation & Einsparhebel)</span></label>
+      <label class="field-label">Branche <span style="font-weight:400;color:var(--muted)">(beeinflusst Fluktuation &amp; Einsparhebel)</span></label>
       <div class="pill-group">
-        <input type="radio" name="branche" id="b0" value="1.0|12" checked><label for="b0">Allgemein</label>
+        <input type="radio" name="branche" id="b0" value="1.0|12" checked=""><label for="b0">Allgemein</label>
         <input type="radio" name="branche" id="b1" value="1.15|18"><label for="b1">Handel / Logistik</label>
         <input type="radio" name="branche" id="b2" value="1.2|15"><label for="b2">Dienstleistung</label>
         <input type="radio" name="branche" id="b3" value="0.9|8"><label for="b3">Produktion</label>
         <input type="radio" name="branche" id="b4" value="1.25|20"><label for="b4">IT / Tech</label>
         <input type="radio" name="branche" id="b5" value="1.1|25"><label for="b5">Gesundheit / Soziales</label>
       </div>
-      <div class="hint" id="brancheHint">Multiplikator: 1,0× – typische Fluktuation: ~12 %</div>
+      <div class="hint" id="brancheHint">Multiplikator: 1,2× – typische Fluktuation: ~15 %</div>
     </div>
 
-    <div class="inline-result" id="stammPreview" style="display:none">
+    <div class="inline-result" id="stammPreview" style="display: flex;">
       <span class="ir-label">Gesamte Jahrespersonalkosten</span>
-      <span class="ir-value neutral" id="stammVal">–</span>
+      <span class="ir-value neutral" id="stammVal">1.620.000&nbsp;€</span>
     </div>
   </div>
 
@@ -470,16 +257,16 @@
     <div class="field">
       <label class="field-label">Aktuell abgerufene Leistung: Quantitativ. Fehlerquote. Termintreue.</label>
       <div class="slider-wrap">
-        <input type="range" id="leistS" min="50" max="90" value="75" step="5" oninput="syncP('leistS','leistN')">
-        <input type="number" id="leistN" class="pct-field" value="75" min="50" max="90" oninput="syncP('leistN','leistS')">
+        <input type="range" id="leistS" min="50" max="90" value="75" step="5" oninput="syncP(&#39;leistS&#39;,&#39;leistN&#39;)" style="background: linear-gradient(to right, rgb(218, 119, 86) 62.5%, rgb(232, 229, 223) 62.5%);">
+        <input type="number" id="leistN" class="pct-field" value="75" min="50" max="90" oninput="syncP(&#39;leistN&#39;,&#39;leistS&#39;)">
       </div>
       <div class="hint">Basis: 90 % als realistisches Maximum – 100 % ist keine Planungsgröße.</div>
     </div>
     <div class="inline-result">
       <span class="ir-label">Vermeidbare Kosten durch Leistungssteigerung</span>
-      <span class="ir-value" id="leistVal">–</span>
+      <span class="ir-value" id="leistVal">87.480&nbsp;€</span>
     </div>
-    <div class="hint" style="margin-top:0.5rem;">Studien belegen: KMU bezahlen 15–25 % für Potenzial, das nie abgerufen wird. (Gallup, DAK, Kienbaum, DGFP)</div>
+    <div class="hint" style="margin-top:0.5rem;">Studien belegen: KMU bezahlen 15–25 % für Potenzial, das nie abgerufen wird.<br>(Gallup, DAK, Kienbaum, DGFP)</div>
   </div>
 
   <!-- ─── FEHLZEITEN ─── -->
@@ -493,22 +280,21 @@
     <div class="field">
       <label class="field-label">Ø Fehltage pro Mitarbeiter und Jahr</label>
       <div class="slider-wrap">
-        <input type="range" id="fehlS" min="1" max="35" value="19" step="1" oninput="syncN('fehlS','fehl')">
-        <input type="number" id="fehl" value="19" min="0" max="100" oninput="syncN('fehl','fehlS')" style="max-width:80px">
+        <input type="range" id="fehlS" min="1" max="35" value="19" step="1" oninput="syncN(&#39;fehlS&#39;,&#39;fehl&#39;)" style="background: linear-gradient(to right, rgb(218, 119, 86) 11.7647%, rgb(232, 229, 223) 11.7647%);">
+        <input type="number" id="fehl" value="19" min="0" max="100" oninput="syncN(&#39;fehl&#39;,&#39;fehlS&#39;)" style="max-width:80px">
       </div>
     </div>
     <div class="field">
       <label class="field-label">Davon motivationsbedingt</label>
       <div class="slider-wrap">
-        <input type="range" id="fehlmS" min="20" max="70" value="40" step="5" oninput="syncP('fehlmS','fehlmN')">
-        <input type="number" id="fehlmN" class="pct-field" value="40" min="20" max="70" oninput="syncP('fehlmN','fehlmS')">
+        <input type="range" id="fehlmS" min="20" max="70" value="40" step="5" oninput="syncP(&#39;fehlmS&#39;,&#39;fehlmN&#39;)" style="background: linear-gradient(to right, rgb(218, 119, 86) 60%, rgb(232, 229, 223) 60%);">
+        <input type="number" id="fehlmN" class="pct-field" value="40" min="20" max="70" oninput="syncP(&#39;fehlmN&#39;,&#39;fehlmS&#39;)">
       </div>
     </div>
     <div class="inline-result">
-      <span class="ir-label">Vermeidbare Kosten durch besseres Betriebsklima &amp; Mitarbeiter-Commitment</span>
-      <span class="ir-value" id="fehlVal">–</span>
+      <span class="ir-label">Vermeidbare Kosten durch besseres Betriebsklima &amp;<br>Mitarbeiter-Commitment</span>
+      <span class="ir-value" id="fehlVal">11.045&nbsp;€</span>
     </div>
-    <div class="hint">(Halbierung der motivationsbedingten Fehlzeiten)</div>
   </div>
 
   <!-- ─── ÜBERSTUNDEN ─── -->
@@ -522,15 +308,15 @@
     <div class="field">
       <label class="field-label">Ø bezahlte Überstunden pro Mitarbeiter und Jahr</label>
       <div class="slider-wrap">
-        <input type="range" id="uestdS" min="0" max="200" value="40" step="5" oninput="syncN('uestdS','uestd')">
-        <input type="number" id="uestd" value="40" min="0" oninput="syncN('uestd','uestdS')" style="max-width:80px">
+        <input type="range" id="uestdS" min="0" max="200" value="40" step="5" oninput="syncN(&#39;uestdS&#39;,&#39;uestd&#39;)" style="background: linear-gradient(to right, rgb(218, 119, 86) 10%, rgb(232, 229, 223) 10%);">
+        <input type="number" id="uestd" value="40" min="0" oninput="syncN(&#39;uestd&#39;,&#39;uestdS&#39;)" style="max-width:80px">
       </div>
     </div>
     <div class="field">
       <label class="field-label">Davon vermeidbar</label>
       <div class="slider-wrap">
-        <input type="range" id="uredS" min="30" max="80" value="60" step="5" oninput="syncP('uredS','uredN')">
-        <input type="number" id="uredN" class="pct-field" value="60" min="30" max="80" oninput="syncP('uredN','uredS')">
+        <input type="range" id="uredS" min="30" max="80" value="60" step="5" oninput="syncP(&#39;uredS&#39;,&#39;uredN&#39;)" style="background: linear-gradient(to right, rgb(218, 119, 86) 100%, rgb(232, 229, 223) 100%);">
+        <input type="number" id="uredN" class="pct-field" value="60" min="30" max="80" oninput="syncP(&#39;uredN&#39;,&#39;uredS&#39;)">
       </div>
     </div>
     <div class="field">
@@ -543,7 +329,7 @@
     </div>
     <div class="inline-result">
       <span class="ir-label">Vermeidbare Kosten durch Produktivitätssteigerung</span>
-      <span class="ir-value" id="uestdVal">–</span>
+      <span class="ir-value" id="uestdVal">17.673&nbsp;€</span>
     </div>
   </div>
 
@@ -558,29 +344,29 @@
     <div class="field">
       <label class="field-label">Jährliche Fluktuationsrate</label>
       <div class="slider-wrap">
-        <input type="range" id="fluktS" min="1" max="40" value="12" step="1" oninput="syncP('fluktS','fluktN')">
-        <input type="number" id="fluktN" class="pct-field" value="12" min="1" max="40" oninput="syncP('fluktN','fluktS')">
+        <input type="range" id="fluktS" min="1" max="25" value="12" step="1" oninput="syncP(&#39;fluktS&#39;,&#39;fluktN&#39;)" style="background: linear-gradient(to right, rgb(218, 119, 86) 2.5641%, rgb(232, 229, 223) 2.5641%);">
+        <input type="number" id="fluktN" class="pct-field" value="12" min="1" max="25" oninput="syncP(&#39;fluktN&#39;,&#39;fluktS&#39;)">
       </div>
-      <div class="hint" id="fluktHint">Ihrer Branche (Allgemein): typisch ~12 %</div>
+      <div class="hint" id="fluktHint">Ihrer Branche (Dienstleistung): typisch ~15 %</div>
     </div>
     <div class="field">
       <label class="field-label">Kosten je Neubesetzung (% des Jahresgehalts)</label>
       <div class="slider-wrap">
-        <input type="range" id="neuKostS" min="50" max="200" value="75" step="25" oninput="syncP('neuKostS','neuKostN')">
-        <input type="number" id="neuKostN" class="pct-field" value="75" min="50" max="200" oninput="syncP('neuKostN','neuKostS')">
+        <input type="range" id="neuKostS" min="50" max="200" value="75" step="25" oninput="syncP(&#39;neuKostS&#39;,&#39;neuKostN&#39;)" style="background: linear-gradient(to right, rgb(218, 119, 86) 0%, rgb(232, 229, 223) 0%);">
+        <input type="number" id="neuKostN" class="pct-field" value="75" min="50" max="200" oninput="syncP(&#39;neuKostN&#39;,&#39;neuKostS&#39;)">
       </div>
     </div>
     <div class="field">
       <label class="field-label">Recruiting-Typ</label>
       <div class="pill-group">
-        <input type="radio" name="recrut" id="ri" value="0.8" checked><label for="ri">Intern</label>
+        <input type="radio" name="recrut" id="ri" value="0.8" checked=""><label for="ri">Intern</label>
         <input type="radio" name="recrut" id="ra" value="1.0"><label for="ra">Extern / Agentur</label>
         <input type="radio" name="recrut" id="rh" value="1.3"><label for="rh">Headhunter</label>
       </div>
     </div>
     <div class="inline-result">
       <span class="ir-label">Vermeidbare Kosten durch Halbierung der Fluktuation</span>
-      <span class="ir-value" id="fluktVal">–</span>
+      <span class="ir-value" id="fluktVal">7.776&nbsp;€</span>
     </div>
   </div>
 
@@ -589,19 +375,19 @@
   <div class="card">
     <div class="card-title">Kompensierbare Stellen bei genereller Leistungssteigerung</div>
     <div class="card-desc">
-      <p>Wie viele Vollzeit-Stellen / Freelancer ließen sich ohne Qualitätsverlust einsparen?</p>
-      <p class="dim">(Keine Kündigung – Einsparung durch Nicht-Nachbesetzung und auslaufende Verträge.)</p>
+      <p>Wie viele Vollzeit-Stellen / Freelancer ließen sich einsparen?</p>
+      <p class="dim" style="font-size:12px;white-space:nowrap">Keine Kündigung – Einsparung durch Nicht-Nachbesetzung &amp; auslaufende Verträge</p>
     </div>
     <div class="field">
       <label class="field-label">Kompensierbare Stellen / Freelancer</label>
       <div class="slider-wrap">
-        <input type="range" id="kompS" min="0" max="20" value="2" step="1" oninput="syncN('kompS','komp')">
-        <input type="number" id="komp" value="2" min="0" oninput="syncN('komp','kompS')" style="max-width:80px">
+        <input type="range" id="kompS" min="0" max="20" value="2" step="1" oninput="syncN(&#39;kompS&#39;,&#39;komp&#39;)" style="background: linear-gradient(to right, rgb(218, 119, 86) 5%, rgb(232, 229, 223) 5%);">
+        <input type="number" id="komp" value="2" min="0" oninput="syncN(&#39;komp&#39;,&#39;kompS&#39;)" style="max-width:80px">
       </div>
     </div>
     <div class="inline-result">
       <span class="ir-label">Vermeidbare Kosten (über 2 Jahre verteilt)</span>
-      <span class="ir-value" id="kompVal">–</span>
+      <span class="ir-value" id="kompVal">27.000&nbsp;€</span>
     </div>
   </div>
 
@@ -611,26 +397,25 @@
     <div class="card-title">High-Performer-Dichte</div>
     <div class="card-desc">
       <p>McKinsey: High-Performer erbringen 2–4× den Output eines Durchschnittsmitarbeiters.</p>
-      <p>Und das kann man lernen.</p>
     </div>
     <div class="field">
       <label class="field-label">Derzeitiger Anteil High-Performer</label>
       <div class="slider-wrap">
-        <input type="range" id="hpIstS" min="0" max="40" value="10" step="5" oninput="syncP('hpIstS','hpIstN')">
-        <input type="number" id="hpIstN" class="pct-field" value="10" min="0" max="40" oninput="syncP('hpIstN','hpIstS')">
+        <input type="range" id="hpIstS" min="0" max="40" value="10" step="5" oninput="syncP(&#39;hpIstS&#39;,&#39;hpIstN&#39;)" style="background: linear-gradient(to right, rgb(218, 119, 86) 12.5%, rgb(232, 229, 223) 12.5%);">
+        <input type="number" id="hpIstN" class="pct-field" value="10" min="0" max="40" oninput="syncP(&#39;hpIstN&#39;,&#39;hpIstS&#39;)">
       </div>
     </div>
     <div class="field">
       <label class="field-label">Ziel</label>
       <div class="slider-wrap">
-        <input type="range" id="hpZielS" min="10" max="80" value="25" step="5" oninput="syncP('hpZielS','hpZielN')">
-        <input type="number" id="hpZielN" class="pct-field" value="25" min="10" max="80" oninput="syncP('hpZielN','hpZielS')">
+        <input type="range" id="hpZielS" min="10" max="80" value="25" step="5" oninput="syncP(&#39;hpZielS&#39;,&#39;hpZielN&#39;)" style="background: linear-gradient(to right, rgb(218, 119, 86) 0%, rgb(232, 229, 223) 0%);">
+        <input type="number" id="hpZielN" class="pct-field" value="25" min="10" max="80" oninput="syncP(&#39;hpZielN&#39;,&#39;hpZielS&#39;)">
       </div>
       <div class="hint">Realistisches Maximum: 80 %</div>
     </div>
     <div class="inline-result">
       <span class="ir-label">Mehrwert durch gesteigerte Leistungsdichte</span>
-      <span class="ir-value" id="hpVal">–</span>
+      <span class="ir-value" id="hpVal">14.580&nbsp;€</span>
     </div>
   </div>
 
@@ -645,21 +430,21 @@
     <div class="field">
       <label class="field-label">Anzahl HR- / Buchhaltungs-Mitarbeiter</label>
       <div class="slider-wrap">
-        <input type="range" id="hrMaS" min="0" max="30" value="2" step="1" oninput="syncN('hrMaS','hrMa')">
-        <input type="number" id="hrMa" value="2" min="0" oninput="syncN('hrMa','hrMaS')" style="max-width:80px">
+        <input type="range" id="hrMaS" min="0" max="30" value="2" step="1" oninput="syncN(&#39;hrMaS&#39;,&#39;hrMa&#39;)" style="background: linear-gradient(to right, rgb(218, 119, 86) 3.33333%, rgb(232, 229, 223) 3.33333%);">
+        <input type="number" id="hrMa" value="2" min="0" oninput="syncN(&#39;hrMa&#39;,&#39;hrMaS&#39;)" style="max-width:80px">
       </div>
     </div>
     <div class="field">
       <label class="field-label">Gewünschter Automatisierungsgrad</label>
       <div class="slider-wrap">
-        <input type="range" id="hrAutoS" min="0" max="95" value="60" step="5" oninput="syncP('hrAutoS','hrAutoN')">
-        <input type="number" id="hrAutoN" class="pct-field" value="60" min="0" max="95" oninput="syncP('hrAutoN','hrAutoS')">
+        <input type="range" id="hrAutoS" min="0" max="95" value="60" step="5" oninput="syncP(&#39;hrAutoS&#39;,&#39;hrAutoN&#39;)" style="background: linear-gradient(to right, rgb(218, 119, 86) 100%, rgb(232, 229, 223) 100%);">
+        <input type="number" id="hrAutoN" class="pct-field" value="60" min="0" max="95" oninput="syncP(&#39;hrAutoN&#39;,&#39;hrAutoS&#39;)">
       </div>
       <div class="hint">40–60 % für Teilprozesse · Maximum: 95 % (vollständige Systemablösung)</div>
     </div>
     <div class="inline-result">
       <span class="ir-label">Vermeidbare Kosten durch Automatisierung HR/Buchhaltung</span>
-      <span class="ir-value" id="hrVal">–</span>
+      <span class="ir-value" id="hrVal">51.300&nbsp;€</span>
     </div>
     <div class="hint" style="margin-top:0.5rem;">*abhängig vom Nutzungsgrad eingesetzter Systeme und Doppelfunktionen.</div>
     <div class="hint" style="margin-top:0.75rem;"><strong>Hinweis:</strong> Die Digitalisierung muss den Arbeitsplatz dauerhaft entbehrlich machen. Vor einer Kündigung sind Alternativbeschäftigung und zumutbare Qualifizierung zu prüfen.</div>
@@ -684,81 +469,81 @@
       </div>
     </div>
 
-    <div class="risk-box" id="risikoBox" style="display:none"></div>
+    <div class="risk-box risk-yellow" id="risikoBox" style="display: none;"><strong>Moderates Verlustrisiko</strong>Kundenbindung beobachten, Personal sensibilisieren.</div>
 
     <div class="field" style="margin-top:1rem;">
       <label class="field-label">Was kostet Sie ein verlorener Schlüsselkunde?</label>
       <div class="slider-wrap">
-        <input type="range" id="kundenInvS" min="0" max="500000" value="0" step="5000" oninput="syncN('kundenInvS','kundenInv');clearTimeout(window._kht);var _kh=document.getElementById('kundenHint');_kh.innerHTML='<span class=\'kdots\'><span>·</span><span>·</span><span>·</span></span>';_kh.style.visibility='visible';window._kht=setTimeout(()=>{var txt='Und jetzt?',i=0;_kh.innerHTML='';var t=setInterval(()=>{_kh.innerHTML+=txt[i++];if(i>=txt.length)clearInterval(t);},101);},1200);">
-        <input type="text" id="kundenInv" value="" inputmode="numeric" oninput="syncN('kundenInv','kundenInvS');clearTimeout(window._kht);var _kh=document.getElementById('kundenHint');_kh.innerHTML='<span class=\'kdots\'><span>·</span><span>·</span><span>·</span></span>';_kh.style.visibility='visible';window._kht=setTimeout(()=>{var txt='Und jetzt?',i=0;_kh.innerHTML='';var t=setInterval(()=>{_kh.innerHTML+=txt[i++];if(i>=txt.length)clearInterval(t);},90);},1200);" style="max-width:110px">
+        <input type="range" id="kundenInvS" min="0" max="500000" value="0" step="5000" oninput="syncN(&#39;kundenInvS&#39;,&#39;kundenInv&#39;);clearTimeout(window._kht);var _kh=document.getElementById(&#39;kundenHint&#39;);_kh.innerHTML=&#39;&lt;span class=\&#39;kdots\&#39;&gt;&lt;span&gt;·&lt;/span&gt;&lt;span&gt;·&lt;/span&gt;&lt;span&gt;·&lt;/span&gt;&lt;/span&gt;&#39;;_kh.style.visibility=&#39;visible&#39;;window._kht=setTimeout(()=&gt;{var txt=&#39;Und jetzt?&#39;,i=0;_kh.innerHTML=&#39;&#39;;var t=setInterval(()=&gt;{_kh.innerHTML+=txt[i++];if(i&gt;=txt.length)clearInterval(t);},101);},1200);" style="background: linear-gradient(to right, rgb(218, 119, 86) 44%, rgb(232, 229, 223) 44%);">
+        <input type="text" id="kundenInv" value="" inputmode="numeric" oninput="syncN(&#39;kundenInv&#39;,&#39;kundenInvS&#39;);clearTimeout(window._kht);var _kh=document.getElementById(&#39;kundenHint&#39;);_kh.innerHTML=&#39;&lt;span class=\&#39;kdots\&#39;&gt;&lt;span&gt;·&lt;/span&gt;&lt;span&gt;·&lt;/span&gt;&lt;span&gt;·&lt;/span&gt;&lt;/span&gt;&#39;;_kh.style.visibility=&#39;visible&#39;;window._kht=setTimeout(()=&gt;{var txt=&#39;Und jetzt?&#39;,i=0;_kh.innerHTML=&#39;&#39;;var t=setInterval(()=&gt;{_kh.innerHTML+=txt[i++];if(i&gt;=txt.length)clearInterval(t);},90);},1200);" style="max-width:110px">
       </div>
-      <div class="hint" id="kundenHint" style="visibility:hidden;margin-top:0.6rem;min-height:1.3rem;white-space:nowrap;">Und jetzt?</div>
+      <div class="hint" id="kundenHint" style="visibility: visible; margin-top: 0.6rem; min-height: 1.3rem; white-space: nowrap;">Und jetzt?</div>
     </div>
   </div>
 
   <!-- ─── ERGEBNIS ─── -->
   <div class="result-card">
     <div class="result-title">Vermeidbare Kosten p.a.</div>
-    <div class="result-total" id="totalVal">–</div>
+    <div class="result-total" id="totalVal">216.854&nbsp;€</div>
 
     <div class="result-grid">
       <div class="result-item">
         <div class="result-item-label">Leistungslücke</div>
-        <div class="result-item-value" id="r-leist">–</div>
-        <div class="result-item-bar-wrap"><div class="result-item-bar" id="rb-leist" style="width:0%"></div></div>
-        <div class="result-item-pct" id="rp-leist"></div>
+        <div class="result-item-value" id="r-leist">87.480&nbsp;€</div>
+        <div class="result-item-bar-wrap"><div class="result-item-bar" id="rb-leist" style="width: 100%;"></div></div>
+        <div class="result-item-pct" id="rp-leist">40 %</div>
       </div>
       <div class="result-item">
         <div class="result-item-label">High-Performer-Dichte (Struktur)</div>
-        <div class="result-item-value" id="r-hp">–</div>
-        <div class="result-item-bar-wrap"><div class="result-item-bar" id="rb-hp" style="width:0%"></div></div>
-        <div class="result-item-pct" id="rp-hp"></div>
+        <div class="result-item-value" id="r-hp">14.580&nbsp;€</div>
+        <div class="result-item-bar-wrap"><div class="result-item-bar" id="rb-hp" style="width: 17%;"></div></div>
+        <div class="result-item-pct" id="rp-hp">7 %</div>
       </div>
       <div class="result-item">
         <div class="result-item-label">Fluktuation &amp; ihre Kosten</div>
-        <div class="result-item-value" id="r-flukt">–</div>
-        <div class="result-item-bar-wrap"><div class="result-item-bar" id="rb-flukt" style="width:0%"></div></div>
-        <div class="result-item-pct" id="rp-flukt"></div>
+        <div class="result-item-value" id="r-flukt">7.776&nbsp;€</div>
+        <div class="result-item-bar-wrap"><div class="result-item-bar" id="rb-flukt" style="width: 9%;"></div></div>
+        <div class="result-item-pct" id="rp-flukt">4 %</div>
       </div>
       <div class="result-item">
         <div class="result-item-label">Motivationsbedingte Fehlzeiten</div>
-        <div class="result-item-value" id="r-fehl">–</div>
-        <div class="result-item-bar-wrap"><div class="result-item-bar" id="rb-fehl" style="width:0%"></div></div>
-        <div class="result-item-pct" id="rp-fehl"></div>
+        <div class="result-item-value" id="r-fehl">11.045&nbsp;€</div>
+        <div class="result-item-bar-wrap"><div class="result-item-bar" id="rb-fehl" style="width: 13%;"></div></div>
+        <div class="result-item-pct" id="rp-fehl">5 %</div>
       </div>
       <div class="result-item">
         <div class="result-item-label">HR- &amp; Buchhaltungs-Automatisierung</div>
-        <div class="result-item-value" id="r-hr">–</div>
-        <div class="result-item-bar-wrap"><div class="result-item-bar" id="rb-hr" style="width:0%"></div></div>
-        <div class="result-item-pct" id="rp-hr"></div>
+        <div class="result-item-value" id="r-hr">51.300&nbsp;€</div>
+        <div class="result-item-bar-wrap"><div class="result-item-bar" id="rb-hr" style="width: 59%;"></div></div>
+        <div class="result-item-pct" id="rp-hr">24 %</div>
       </div>
       <div class="result-item">
         <div class="result-item-label">Überstunden</div>
-        <div class="result-item-value" id="r-uestd">–</div>
-        <div class="result-item-bar-wrap"><div class="result-item-bar" id="rb-uestd" style="width:0%"></div></div>
-        <div class="result-item-pct" id="rp-uestd"></div>
+        <div class="result-item-value" id="r-uestd">17.673&nbsp;€</div>
+        <div class="result-item-bar-wrap"><div class="result-item-bar" id="rb-uestd" style="width: 20%;"></div></div>
+        <div class="result-item-pct" id="rp-uestd">8 %</div>
       </div>
       <div class="result-item">
         <div class="result-item-label">Komp. Stellen / Freelancer</div>
-        <div class="result-item-value" id="r-komp">–</div>
-        <div class="result-item-bar-wrap"><div class="result-item-bar" id="rb-komp" style="width:0%"></div></div>
-        <div class="result-item-pct" id="rp-komp"></div>
+        <div class="result-item-value" id="r-komp">27.000&nbsp;€</div>
+        <div class="result-item-bar-wrap"><div class="result-item-bar" id="rb-komp" style="width: 31%;"></div></div>
+        <div class="result-item-pct" id="rp-komp">12 %</div>
       </div>
-      <div class="result-item risk">
+      <div class="result-item">
         <div class="result-item-label">Kundenverlust-Risiko</div>
         <div class="result-item-value">Nicht quantifizierbar.<br>Aber unbezahlbar.</div>
       </div>
     </div>
 
     <div class="cta-block">
-      <div class="cta-line1"><span id="ctaSum">–</span> Einsparpotenzial.</div>
+      <div class="cta-line1"><span id="ctaSum">216.854&nbsp;€</span> Einsparpotenzial.</div>
       <div class="cta-year">Jedes Jahr.</div>
       <div class="cta-btns">
         <a class="cta-btn" href="mailto:jensmeyer1974@icloud.com?subject=Potenzialrechner%20%E2%80%93%20Kontaktanfrage">
           ✉ Kontakt – Jens Meyer
         </a>
         <a class="cta-btn" href="tel:+491786604259">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8a19.79 19.79 0 01-3.07-8.68A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8a19.79 19.79 0 01-3.07-8.68A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"></path></svg>
           +49 178 6604259
         </a>
       </div>
@@ -842,7 +627,7 @@ function colorSlider(s) {
   if (!s||s.type!=='range') return;
   const min=parseFloat(s.min)||0, max=parseFloat(s.max)||100, val=parseFloat(s.value);
   const pct=((val-min)/(max-min))*100;
-  s.style.background=`linear-gradient(to right,#da7756 ${pct}%,#e8e5df ${pct}%)`;
+  s.style.background=`linear-gradient(to right,#fbbf24 ${pct}%,#d2d2d7 ${pct}%)`;
 }
 
 const brancheLabels = {
@@ -916,20 +701,29 @@ function calc() {
 
   // 5. Kompensierbare Stellen
   const komp  = g('komp');
-  const eKomp = komp * vollK / 2;
+  const eKomp = komp * brutto / 2;
   document.getElementById('kompVal').textContent = fmt(eKomp);
 
-  // 6. High-Performer
-  const hpIst  = g('hpIstS')/100;
-  const hpZiel = g('hpZielS')/100;
+  // 6. High-Performer (Ziel nie kleiner als Ist)
+  let hpIstV  = g('hpIstS');
+  let hpZielV = g('hpZielS');
+  if (hpZielV < hpIstV) {
+    hpZielV = hpIstV;
+    const zs = document.getElementById('hpZielS');
+    const zn = document.getElementById('hpZielN');
+    if (zs) { zs.value = hpZielV; colorSlider(zs); }
+    if (zn) zn.value = hpZielV;
+  }
+  const hpIst  = hpIstV/100;
+  const hpZiel = hpZielV/100;
   const hpDelta= Math.max(0, hpZiel - hpIst);
-  const eHP    = ma * hpDelta * vollK * 0.15 * multi;
+  const eHP    = ma * hpDelta * vollK * 0.075 * multi;
   document.getElementById('hpVal').textContent = fmt(eHP);
 
   // 7. HR-Automatisierung (Basis: Personalkosten der HR-MA)
   const hrMa   = g('hrMa');
   const hrAuto = g('hrAutoS')/100;
-  const eHR    = hrMa * vollK * Math.min(hrAuto, 0.95);
+  const eHR    = hrMa * brutto * Math.min(hrAuto, 0.95);
   document.getElementById('hrVal').textContent = fmt(eHR);
 
   // Gesamt
@@ -960,7 +754,7 @@ const kzufData = {
   4: { cls:'risk-green',  label:'Geringes Verlustrisiko',          text:'Ihre Kunden sind zufrieden – Bindung aktiv pflegen, um dieses Niveau zu halten.' },
   3: { cls:'risk-yellow', label:'Moderates Verlustrisiko',         text:'Kundenbindung beobachten, Personal sensibilisieren.' },
   2: { cls:'risk-amber',  label:'Erhöhtes Verlustrisiko',          text:'Konkrete Verbesserungsmaßnahmen erarbeiten – bevor Kunden die Initiative übernehmen.' },
-  1: { cls:'risk-red',    label:'Kritisches Verlustrisiko',        text:'Akuter Handlungsbedarf. Ein verlorener Schlüsselkunde bedeutet oft sofortigen Liquiditätsdruck.' },
+  1: { cls:'risk-red',    label:'Individuelles/Situatives Verlustrisiko',        text:'Akuter Handlungsbedarf. Ein verlorener Schlüsselkunde bedeutet oft sofortigen Liquiditätsdruck.' },
 };
 
 function updateRisiko() {
@@ -988,7 +782,15 @@ document.querySelectorAll('input[type="number"]').forEach(el => {
 });
 calc();
 numFmtIds.forEach(id => formatNumInput(id));
+document.querySelectorAll('.pct-field').forEach(el => {
+  if (el.nextElementSibling && el.nextElementSibling.classList.contains('pct-suffix')) return;
+  const sp = document.createElement('span');
+  sp.className = 'pct-suffix';
+  sp.textContent = '%';
+  el.insertAdjacentElement('afterend', sp);
+});
 </script>
 
-</body>
-</html>
+
+
+</body></html>
